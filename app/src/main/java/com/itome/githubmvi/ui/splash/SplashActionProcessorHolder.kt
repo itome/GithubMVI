@@ -1,6 +1,6 @@
-package com.itome.githubmvi.splash
+package com.itome.githubmvi.ui.splash
 
-import com.itome.githubmvi.splash.SplashResult.*
+import com.itome.githubmvi.ui.splash.SplashResult.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers

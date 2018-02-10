@@ -1,4 +1,4 @@
-package com.itome.githubmvi.splash
+package com.itome.githubmvi.ui.splash
 
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext

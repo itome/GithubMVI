@@ -1,4 +1,4 @@
-package com.itome.githubmvi.splash
+package com.itome.githubmvi.ui.splash
 
 import android.app.Activity
 import android.content.Context
@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.itome.githubmvi.BuildConfig
 import com.itome.githubmvi.mvibase.MviView
-import com.itome.githubmvi.oauth2.OAuth2Activity
+import com.itome.githubmvi.ui.oauth2.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject

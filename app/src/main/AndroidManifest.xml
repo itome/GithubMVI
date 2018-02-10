@@ -11,14 +11,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.itome.githubmvi.splash.SplashActivity">
+        <activity android:name="com.itome.githubmvi.ui.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.itome.githubmvi.oauth2.OAuth2Activity"></activity>
+        <activity android:name="com.itome.githubmvi.ui.oauth2.OAuth2Activity"></activity>
     </application>
 
 </manifest>

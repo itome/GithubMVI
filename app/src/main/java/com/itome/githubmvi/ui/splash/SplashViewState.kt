@@ -1,4 +1,4 @@
-package com.itome.githubmvi.splash
+package com.itome.githubmvi.ui.splash
 
 import com.itome.githubmvi.data.User
 import com.itome.githubmvi.mvibase.MviViewState
