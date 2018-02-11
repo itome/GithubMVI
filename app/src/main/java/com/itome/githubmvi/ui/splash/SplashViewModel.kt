@@ -1,10 +1,7 @@
 package com.itome.githubmvi.ui.splash
 
-import com.itome.githubmvi.extensions.notOfType
 import com.itome.githubmvi.mvibase.MviViewModel
 import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
-import io.reactivex.functions.BiFunction
 import io.reactivex.subjects.PublishSubject
 
 class SplashViewModel(
@@ -22,7 +19,6 @@ class SplashViewModel(
 
     private fun compose(): Observable<SplashViewState> {
         return intentsSubject
-                .compose(intentFilter)
                 .map(this::actionFromIntent)
                 .compose(actionProcessorHolder.actionProcessor)
                 .scan(SplashViewState.idle(), reducer)
@@ -30,50 +26,36 @@ class SplashViewModel(
                 .autoConnect(0)
     }
 
-    private val intentFilter: ObservableTransformer<SplashIntent, SplashIntent>
-        get() = ObservableTransformer { intents ->
-            intents.publish { shared ->
-                Observable.merge(
-                        shared.ofType(SplashIntent.InitialIntent::class.java).take(1),
-                        shared.notOfType(SplashIntent.InitialIntent::class.java)
-                )
-            }
-        }
-
     private fun actionFromIntent(intent: SplashIntent): SplashAction {
         return when (intent) {
-            SplashIntent.InitialIntent ->
-                SplashAction.DoNothingAction
-            is SplashIntent.FetchSelfDataIntent ->
-                SplashAction.FetchSelfDataAction(intent.accessToken)
+            SplashIntent.FetchLoginDataIntent ->
+                SplashAction.FetchLoginDataAction
             is SplashIntent.FetchAccessTokenIntent ->
                 SplashAction.FetchAccessTokenAction(intent.clientId, intent.clientSecret, intent.code)
         }
     }
 
     companion object {
-        private val reducer = BiFunction { previousState: SplashViewState, result: SplashResult ->
+        private val reducer = { previousState: SplashViewState, result: SplashResult ->
             when (result) {
-                is SplashResult.DoNothingResult -> when(result) {
-                    SplashResult.DoNothingResult.Success -> previousState
-                    is SplashResult.DoNothingResult.Failure -> previousState.copy(error = result.error)
-                }
 
                 is SplashResult.FetchAccessTokenResult -> when (result) {
-                    is SplashResult.FetchAccessTokenResult.Success ->
-                        previousState.copy(accessToken = result.accessToken, isLoading = false)
+                    SplashResult.FetchAccessTokenResult.Success ->
+                        previousState.copy(needsAccessToken = false, isLoading = false)
                     is SplashResult.FetchAccessTokenResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
                     SplashResult.FetchAccessTokenResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }
 
-                is SplashResult.FetchSelfDataResult -> when (result) {
-                    is SplashResult.FetchSelfDataResult.Success ->
+                is SplashResult.FetchLoginDataResult -> when (result) {
+                    is SplashResult.FetchLoginDataResult.Success ->
                         previousState.copy(user = result.user, isLoading = false)
-                    is SplashResult.FetchSelfDataResult.Failure ->
+                    is SplashResult.FetchLoginDataResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
-                    SplashResult.FetchSelfDataResult.InFlight ->
+                    SplashResult.FetchLoginDataResult.NeedsAccessToken ->
+                        previousState.copy(needsAccessToken = true)
+                    SplashResult.FetchLoginDataResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }
             }

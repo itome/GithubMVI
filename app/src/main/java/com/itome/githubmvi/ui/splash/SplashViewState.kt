@@ -1,11 +1,11 @@
 package com.itome.githubmvi.ui.splash
 
-import com.itome.githubmvi.data.User
+import com.itome.githubmvi.data.model.User
 import com.itome.githubmvi.mvibase.MviViewState
 
 data class SplashViewState(
         val user: User?,
-        val accessToken: String,
+        val needsAccessToken: Boolean,
         val isLoading: Boolean,
         val error: Throwable?
 ) : MviViewState {
@@ -13,7 +13,7 @@ data class SplashViewState(
         fun idle(): SplashViewState {
             return SplashViewState(
                     user = null,
-                    accessToken = "",
+                    needsAccessToken = false,
                     isLoading = false,
                     error = null
             )

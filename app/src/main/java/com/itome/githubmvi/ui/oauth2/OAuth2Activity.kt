@@ -5,8 +5,8 @@ import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -38,7 +38,7 @@ class OAuth2Activity : AppCompatActivity() {
         webView.loadUrl(url)
     }
 
-    inner class OAuth2WebViewClient: WebViewClient() {
+    inner class OAuth2WebViewClient : WebViewClient() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             url ?: return
