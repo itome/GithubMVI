@@ -83,10 +83,6 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
 
     override fun render(state: SplashViewState) {
         ui.loginButton.setVisibility(state.needsAccessToken)
-        if (state.user == null) {
-            fetchLoginDataIntentPublisher.onNext(SplashIntent.FetchLoginDataIntent)
-            return
-        }
     }
 
     private fun fetchAccessTokenIntent(): Observable<SplashIntent.FetchAccessTokenIntent> {
