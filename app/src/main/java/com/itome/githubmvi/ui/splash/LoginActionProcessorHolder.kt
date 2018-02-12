@@ -1,19 +1,19 @@
 package com.itome.githubmvi.ui.splash
 
 import com.itome.githubmvi.data.repository.LoginRepository
-import com.itome.githubmvi.ui.splash.SplashResult.FetchAccessTokenResult
-import com.itome.githubmvi.ui.splash.SplashResult.FetchLoginDataResult
+import com.itome.githubmvi.ui.splash.LoginResult.FetchAccessTokenResult
+import com.itome.githubmvi.ui.splash.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-class SplashActionProcessorHolder(
+class LoginActionProcessorHolder(
         private val repository: LoginRepository
 ) {
 
     private val fetchAccessTokenProcessor =
-            ObservableTransformer<SplashAction.FetchAccessTokenAction, FetchAccessTokenResult> { actions ->
+            ObservableTransformer<LoginAction.FetchAccessTokenAction, FetchAccessTokenResult> { actions ->
                 actions.flatMap { action ->
                     repository.fetchAccessToken(action.clientId, action.clientSecret, action.code)
                             .andThen(Observable.just(FetchAccessTokenResult.Success))
@@ -26,7 +26,7 @@ class SplashActionProcessorHolder(
             }
 
     private val fetchLoginDataProcessor =
-            ObservableTransformer<SplashAction.FetchLoginDataAction, SplashResult.FetchLoginDataResult> { actions ->
+            ObservableTransformer<LoginAction.FetchLoginDataAction, LoginResult.FetchLoginDataResult> { actions ->
                 actions.flatMap {
                     Observable.just(repository.getAccessToken())
                             .flatMap { accessToken ->
@@ -44,17 +44,17 @@ class SplashActionProcessorHolder(
             }
 
     internal var actionProcessor =
-            ObservableTransformer<SplashAction, SplashResult> { actions ->
+            ObservableTransformer<LoginAction, LoginResult> { actions ->
                 actions.publish { shared ->
                     Observable.merge(
-                            shared.ofType(SplashAction.FetchAccessTokenAction::class.java).compose(fetchAccessTokenProcessor),
-                            shared.ofType(SplashAction.FetchLoginDataAction::class.java).compose(fetchLoginDataProcessor)
+                            shared.ofType(LoginAction.FetchAccessTokenAction::class.java).compose(fetchAccessTokenProcessor),
+                            shared.ofType(LoginAction.FetchLoginDataAction::class.java).compose(fetchLoginDataProcessor)
                     ).mergeWith(
                             shared.filter({ v ->
-                                v !is SplashAction.FetchAccessTokenAction
-                                        && v != SplashAction.FetchLoginDataAction
+                                v !is LoginAction.FetchAccessTokenAction
+                                        && v != LoginAction.FetchLoginDataAction
                             }).flatMap({ w ->
-                                Observable.error<SplashResult>(
+                                Observable.error<LoginResult>(
                                         IllegalArgumentException("Unknown Action type: $w"))
                             })
                     )

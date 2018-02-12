@@ -17,20 +17,20 @@ import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.startActivityForResult
 
-class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewState> {
+class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> {
 
     companion object {
         private const val REQUEST_OAUTH = 0
     }
 
-    private val ui by lazy { SplashActivityUI() }
-    private val viewModel: SplashViewModel by lazy {
-        SplashViewModel(SplashActionProcessorHolder(
+    private val ui by lazy { LoginActivityUI() }
+    private val viewModel: LoginViewModel by lazy {
+        LoginViewModel(LoginActionProcessorHolder(
                 LoginRepository(LoginLocalDataStore(), LoginRemoteDataStore())
         ))
     }
-    private val fetchAccessTokenIntentPublisher = PublishSubject.create<SplashIntent.FetchAccessTokenIntent>()
-    private val fetchLoginDataIntentPublisher = PublishSubject.create<SplashIntent.FetchLoginDataIntent>()
+    private val fetchAccessTokenIntentPublisher = PublishSubject.create<LoginIntent.FetchAccessTokenIntent>()
+    private val fetchLoginDataIntentPublisher = PublishSubject.create<LoginIntent.FetchLoginDataIntent>()
     private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +48,7 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
         if (requestCode == REQUEST_OAUTH && resultCode == Activity.RESULT_OK) {
             val code = data?.getStringExtra(OAuth2Activity.CODE)!!
             fetchAccessTokenIntentPublisher.onNext(
-                    SplashIntent.FetchAccessTokenIntent(
+                    LoginIntent.FetchAccessTokenIntent(
                             BuildConfig.CLIENT_ID,
                             BuildConfig.CLIENT_SECRET,
                             code)
@@ -59,7 +59,7 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
     override fun onStart() {
         super.onStart()
         bind()
-        fetchLoginDataIntentPublisher.onNext(SplashIntent.FetchLoginDataIntent)
+        fetchLoginDataIntentPublisher.onNext(LoginIntent.FetchLoginDataIntent)
     }
 
     override fun onDestroy() {
@@ -67,14 +67,14 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
         disposables.dispose()
     }
 
-    override fun intents(): Observable<SplashIntent> {
+    override fun intents(): Observable<LoginIntent> {
         return Observable.merge(
                 fetchAccessTokenIntent(),
                 fetchSelfDataIntent()
         )
     }
 
-    override fun render(state: SplashViewState) {
+    override fun render(state: LoginViewState) {
         ui.loginButton.setVisibility(state.needsAccessToken)
     }
 
@@ -83,11 +83,11 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
         viewModel.processIntents(intents())
     }
 
-    private fun fetchAccessTokenIntent(): Observable<SplashIntent.FetchAccessTokenIntent> {
+    private fun fetchAccessTokenIntent(): Observable<LoginIntent.FetchAccessTokenIntent> {
         return fetchAccessTokenIntentPublisher
     }
 
-    private fun fetchSelfDataIntent(): Observable<SplashIntent.FetchLoginDataIntent> {
+    private fun fetchSelfDataIntent(): Observable<LoginIntent.FetchLoginDataIntent> {
         return fetchLoginDataIntentPublisher
     }
 }
