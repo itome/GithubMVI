@@ -2,4 +2,5 @@
     <string name="app_name">GithubMVI</string>
     <string name="authorize_app">Authorize App</string>
     <string name="welcome_message">Welcome %1$s</string>
+    <string name="fetching_user_data">ユーザー情報を取得しています…</string>
 </resources>
