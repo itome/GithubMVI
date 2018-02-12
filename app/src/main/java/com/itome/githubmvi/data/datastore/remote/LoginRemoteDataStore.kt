@@ -1,29 +1,22 @@
 package com.itome.githubmvi.data.datastore.remote
 
-import com.google.gson.Gson
-import com.itome.githubmvi.data.model.AccessTokenData
+import com.itome.githubmvi.data.datastore.ApiService
+import com.itome.githubmvi.data.datastore.LoginService
+import com.itome.githubmvi.data.datastore.RemoteDataStore
+import com.itome.githubmvi.data.model.User
 import io.reactivex.Single
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import java.io.IOException
 
-class LoginRemoteDataStore {
+class LoginRemoteDataStore : RemoteDataStore() {
 
     fun fetchAccessToken(clientId: String, clientSecret: String, code: String): Single<String> {
-        return Single.create {
-            val url = "https://github.com/login/oauth/access_token?" +
-                    "code=$code&client_id=$clientId&client_secret=$clientSecret"
-            val request = Request.Builder()
-                    .header("Accept", "application/json")
-                    .url(url).build()
+        val baseUrl = "https://github.com/"
+        val service = createService(LoginService::class.java, null, baseUrl)
+        return service.getAccessTokenData(code, clientId, clientSecret)
+                .map { it.access_token }
+    }
 
-            try {
-                val responseBody = OkHttpClient().newCall(request).execute().body()!!.string()
-                val tokenData = Gson().fromJson(responseBody, AccessTokenData::class.java)
-                it.onSuccess(tokenData.access_token)
-            } catch (e: IOException) {
-                it.onError(e)
-            }
-        }
+    fun fetchLoginUser(accessToken: String): Single<User> {
+        val service = createService(ApiService::class.java, accessToken)
+        return service.getUser()
     }
 }

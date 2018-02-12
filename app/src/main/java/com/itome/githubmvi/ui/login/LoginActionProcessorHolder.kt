@@ -28,12 +28,13 @@ class LoginActionProcessorHolder(
     private val fetchLoginDataProcessor =
             ObservableTransformer<LoginAction.FetchLoginDataAction, LoginResult.FetchLoginDataResult> { actions ->
                 actions.flatMap {
-                    Observable.just(repository.getAccessToken())
+                    repository.readAccessToken()
+                            .toObservable()
                             .flatMap { accessToken ->
                                 if (accessToken == "") {
                                     Observable.just(FetchLoginDataResult.NeedsAccessToken)
                                 } else {
-                                    Observable.just(FetchLoginDataResult.InFlight)
+                                    fetchLoginUser
                                 }
                             }
                             .cast(FetchLoginDataResult::class.java)
@@ -42,6 +43,13 @@ class LoginActionProcessorHolder(
                             .observeOn(AndroidSchedulers.mainThread())
                 }
             }
+
+    private val fetchLoginUser =
+            repository.fetchLoginUser()
+                    .toObservable()
+                    .map {
+                        FetchLoginDataResult.Success(userName = it.name, userImageUrl = it.avatar_url)
+                    }
 
     internal var actionProcessor =
             ObservableTransformer<LoginAction, LoginResult> { actions ->
