@@ -34,7 +34,7 @@ class LoginActionProcessorHolder(
                                 if (accessToken == "") {
                                     Observable.just(FetchLoginDataResult.NeedsAccessToken)
                                 } else {
-                                    fetchLoginUser
+                                    getLoginUser
                                 }
                             }
                             .cast(FetchLoginDataResult::class.java)
@@ -44,8 +44,8 @@ class LoginActionProcessorHolder(
                 }
             }
 
-    private val fetchLoginUser =
-            repository.fetchLoginUser()
+    private val getLoginUser =
+            repository.getLoginUser()
                     .toObservable()
                     .map {
                         FetchLoginDataResult.Success(userName = it.name, userImageUrl = it.avatar_url)

@@ -20,10 +20,15 @@ class LoginRepository(
                 .flatMapCompletable { localDataStore.saveAccessToken(it) }
     }
 
-    fun fetchLoginUser(): Single<User> {
+    fun getLoginUser(): Single<User> {
+        return localDataStore.readLoginUser()
+                .onErrorResumeNext(fetchLoginUser())
+    }
+
+    private fun fetchLoginUser(): Single<User> {
         return readAccessToken()
-                .flatMap { accessToken ->
-                    remoteDataStore.fetchLoginUser(accessToken)
-                }
+                .flatMap { accessToken -> remoteDataStore.fetchLoginUser(accessToken) }
+                .flatMapCompletable { user -> localDataStore.saveLoginUser(user) }
+                .andThen(localDataStore.readLoginUser())
     }
 }
