@@ -8,7 +8,6 @@ import com.itome.githubmvi.BuildConfig
 import com.itome.githubmvi.data.datastore.local.LoginLocalDataStore
 import com.itome.githubmvi.data.datastore.remote.LoginRemoteDataStore
 import com.itome.githubmvi.data.repository.LoginRepository
-import com.itome.githubmvi.extensions.setVisibility
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.ui.oauth2.OAuth2Activity
 import io.reactivex.Observable
@@ -37,7 +36,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         super.onCreate(savedInstanceState)
         ui.setContentView(this)
 
-        ui.loginButton.setOnClickListener {
+        ui.oauthButtonClickPublisher.subscribe {
             val url = "https://github.com/login/oauth/authorize?client_id=${BuildConfig.CLIENT_ID}"
             startActivityForResult<OAuth2Activity>(REQUEST_OAUTH, OAuth2Activity.URL to url)
         }
@@ -75,7 +74,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
     }
 
     override fun render(state: LoginViewState) {
-        ui.loginButton.setVisibility(state.needsAccessToken)
+        ui.applyState(state)
     }
 
     private fun bind() {
