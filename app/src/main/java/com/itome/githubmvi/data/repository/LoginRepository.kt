@@ -15,6 +15,8 @@ class LoginRepository(
 
     fun fetchAccessToken(clientId: String, clientSecret: String, code: String): Completable {
         return remoteDataStore.fetchAccessToken(clientId, clientSecret, code)
-                .flatMapCompletable { localDataStore.saveAccessToken(it) }
+                .flatMapCompletable {
+                    return@flatMapCompletable localDataStore.saveAccessToken(it)
+                }
     }
 }

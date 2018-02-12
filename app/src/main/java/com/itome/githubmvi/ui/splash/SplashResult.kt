@@ -12,7 +12,7 @@ sealed class SplashResult : MviResult {
     }
 
     sealed class FetchLoginDataResult : SplashResult() {
-        data class Success(val user: User) : FetchLoginDataResult()
+        data class Success(val userName: String, val userImageUrl: String) : FetchLoginDataResult()
         data class Failure(val error: Throwable) : FetchLoginDataResult()
         object NeedsAccessToken : FetchLoginDataResult()
         object InFlight : FetchLoginDataResult()

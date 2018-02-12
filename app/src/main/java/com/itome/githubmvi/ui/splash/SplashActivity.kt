@@ -41,7 +41,6 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
             val url = "https://github.com/login/oauth/authorize?client_id=${BuildConfig.CLIENT_ID}"
             startActivityForResult<OAuth2Activity>(REQUEST_OAUTH, OAuth2Activity.URL to url)
         }
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -65,13 +64,7 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
 
     override fun onDestroy() {
         super.onDestroy()
-
         disposables.dispose()
-    }
-
-    private fun bind() {
-        disposables.add(viewModel.states().subscribe(this::render, {}))
-        viewModel.processIntents(intents())
     }
 
     override fun intents(): Observable<SplashIntent> {
@@ -83,6 +76,11 @@ class SplashActivity : AppCompatActivity(), MviView<SplashIntent, SplashViewStat
 
     override fun render(state: SplashViewState) {
         ui.loginButton.setVisibility(state.needsAccessToken)
+    }
+
+    private fun bind() {
+        disposables.add(viewModel.states().subscribe(this::render))
+        viewModel.processIntents(intents())
     }
 
     private fun fetchAccessTokenIntent(): Observable<SplashIntent.FetchAccessTokenIntent> {
