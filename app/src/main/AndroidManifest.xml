@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.itome.githubmvi.ui.splash.LoginActivity"
+            android:name="com.itome.githubmvi.ui.login.LoginActivity"
             android:theme="@style/NoActionBar"
             android:screenOrientation="portrait">
             <intent-filter>

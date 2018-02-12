@@ -1,4 +1,4 @@
-package com.itome.githubmvi.ui.splash
+package com.itome.githubmvi.ui.login
 
 import com.itome.githubmvi.extensions.notOfType
 import com.itome.githubmvi.mvibase.MviViewModel

@@ -1,4 +1,4 @@
-package com.itome.githubmvi.ui.splash
+package com.itome.githubmvi.ui.login
 
 import android.view.Gravity
 import android.widget.Button

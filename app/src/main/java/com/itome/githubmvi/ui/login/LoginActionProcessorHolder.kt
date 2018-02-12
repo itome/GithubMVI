@@ -1,8 +1,8 @@
-package com.itome.githubmvi.ui.splash
+package com.itome.githubmvi.ui.login
 
 import com.itome.githubmvi.data.repository.LoginRepository
-import com.itome.githubmvi.ui.splash.LoginResult.FetchAccessTokenResult
-import com.itome.githubmvi.ui.splash.LoginResult.FetchLoginDataResult
+import com.itome.githubmvi.ui.login.LoginResult.FetchAccessTokenResult
+import com.itome.githubmvi.ui.login.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
