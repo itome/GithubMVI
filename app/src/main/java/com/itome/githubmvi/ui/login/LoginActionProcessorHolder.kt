@@ -19,7 +19,12 @@ class LoginActionProcessorHolder(
                     repository.fetchAccessToken(action.clientId, action.clientSecret, action.code)
                             .flatMap { repository.fetchLoginUser() }
                             .toObservable()
-                            .map { FetchAccessTokenResult.Success(it.name, it.avatar_url) }
+                            .flatMap {
+                                pairWithDelay(1L,
+                                        FetchAccessTokenResult.Success(it.name, it.avatar_url),
+                                        FetchAccessTokenResult.StartNextActivity
+                                )
+                            }
                             .cast(FetchAccessTokenResult::class.java)
                             .onErrorReturn(FetchAccessTokenResult::Failure)
                             .subscribeOn(Schedulers.io())
@@ -37,7 +42,14 @@ class LoginActionProcessorHolder(
                                 if (accessToken == "") {
                                     Observable.just(FetchLoginDataResult.NeedsAccessToken)
                                 } else {
-                                    getLoginUser
+                                    repository.getLoginUser()
+                                            .toObservable()
+                                            .flatMap {
+                                                pairWithDelay(1L,
+                                                        FetchLoginDataResult.Success(it.name, it.avatar_url),
+                                                        FetchLoginDataResult.StartNextActivity
+                                                )
+                                            }
                                 }
                             }
                             .cast(FetchLoginDataResult::class.java)
@@ -47,16 +59,6 @@ class LoginActionProcessorHolder(
                             .startWith(FetchLoginDataResult.InFlight)
                 }
             }
-
-    private val getLoginUser =
-            repository.getLoginUser()
-                    .toObservable()
-                    .flatMap {
-                        pairWithDelay(1L,
-                                FetchLoginDataResult.Success(it.name, it.avatar_url),
-                                FetchLoginDataResult.StartNextActivity
-                        )
-                    }
 
     internal var actionProcessor =
             ObservableTransformer<LoginAction, LoginResult> { actions ->

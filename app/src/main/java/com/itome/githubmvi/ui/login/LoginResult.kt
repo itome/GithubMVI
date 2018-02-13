@@ -7,6 +7,7 @@ sealed class LoginResult : MviResult {
     sealed class FetchAccessTokenResult : LoginResult() {
         data class Success(val userName: String, val userImageUrl: String) : FetchAccessTokenResult()
         data class Failure(val error: Throwable) : FetchAccessTokenResult()
+        object StartNextActivity : FetchAccessTokenResult()
         object InFlight : FetchAccessTokenResult()
     }
 

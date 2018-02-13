@@ -67,6 +67,12 @@ class LoginViewModel(
                                 needsAccessToken = true,
                                 isLoading = false
                         )
+                    LoginResult.FetchAccessTokenResult.StartNextActivity ->
+                        previousState.copy(
+                                needsAccessToken = false,
+                                startNextActivity = true,
+                                isLoading = false
+                        )
                     LoginResult.FetchAccessTokenResult.InFlight ->
                         previousState.copy(
                                 isLoading = true,

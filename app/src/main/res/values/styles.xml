@@ -8,7 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name = "NoActionBar" parent ="Theme.AppCompat.Light">
+    <style name = "SplashTheme" parent ="Theme.AppCompat.Light">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentTransitions">true</item>
@@ -16,6 +16,12 @@
         <item name="android:windowExitTransition">@android:transition/fade</item>
 
         <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+
+    <style name = "WebViewTheme" parent ="Theme.AppCompat.Light">
+        <item name="windowNoTitle">true</item>
+        <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
