@@ -1,6 +1,5 @@
 package com.itome.githubmvi.ui.login
 
-import android.util.Log
 import com.itome.githubmvi.extensions.notOfType
 import com.itome.githubmvi.mvibase.MviViewModel
 import io.reactivex.Observable

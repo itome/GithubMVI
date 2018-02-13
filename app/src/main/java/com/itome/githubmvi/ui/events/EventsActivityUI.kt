@@ -1,6 +1,5 @@
 package com.itome.githubmvi.ui.events
 
-import android.view.View
 import org.jetbrains.anko.AnkoComponent
 import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.frameLayout
