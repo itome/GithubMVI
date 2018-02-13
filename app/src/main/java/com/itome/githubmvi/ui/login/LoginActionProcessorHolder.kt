@@ -16,7 +16,9 @@ class LoginActionProcessorHolder(
             ObservableTransformer<LoginAction.FetchAccessTokenAction, FetchAccessTokenResult> { actions ->
                 actions.flatMap { action ->
                     repository.fetchAccessToken(action.clientId, action.clientSecret, action.code)
-                            .andThen(Observable.just(FetchAccessTokenResult.Success))
+                            .flatMap { repository.fetchLoginUser() }
+                            .toObservable()
+                            .map { FetchAccessTokenResult.Success(it.name, it.avatar_url) }
                             .cast(FetchAccessTokenResult::class.java)
                             .onErrorReturn(FetchAccessTokenResult::Failure)
                             .subscribeOn(Schedulers.io())
@@ -41,15 +43,14 @@ class LoginActionProcessorHolder(
                             .onErrorReturn(FetchLoginDataResult::Failure)
                             .subscribeOn(Schedulers.io())
                             .observeOn(AndroidSchedulers.mainThread())
+                            .startWith(FetchLoginDataResult.InFlight)
                 }
             }
 
     private val getLoginUser =
             repository.getLoginUser()
                     .toObservable()
-                    .map {
-                        FetchLoginDataResult.Success(userName = it.name, userImageUrl = it.avatar_url)
-                    }
+                    .map { FetchLoginDataResult.Success(it.name, it.avatar_url) }
 
     internal var actionProcessor =
             ObservableTransformer<LoginAction, LoginResult> { actions ->

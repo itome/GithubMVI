@@ -1,5 +1,6 @@
 package com.itome.githubmvi.ui.login
 
+import android.util.Log
 import com.itome.githubmvi.extensions.notOfType
 import com.itome.githubmvi.mvibase.MviViewModel
 import io.reactivex.Observable
@@ -24,6 +25,7 @@ class LoginViewModel(
                 .compose(intentFilter)
                 .map(this::actionFromIntent)
                 .compose(actionProcessorHolder.actionProcessor)
+                .doOnEach { Log.d("RESULT", it.value.toString()) }
                 .scan(LoginViewState.idle(), reducer)
                 .replay(1)
                 .autoConnect(0)
@@ -53,12 +55,24 @@ class LoginViewModel(
             when (result) {
 
                 is LoginResult.FetchAccessTokenResult -> when (result) {
-                    LoginResult.FetchAccessTokenResult.Success ->
-                        previousState.copy(needsAccessToken = false, isLoading = false)
+                    is LoginResult.FetchAccessTokenResult.Success ->
+                        previousState.copy(
+                                userName = result.userName,
+                                userImageUrl = result.userImageUrl,
+                                needsAccessToken = false,
+                                isLoading = false
+                        )
                     is LoginResult.FetchAccessTokenResult.Failure ->
-                        previousState.copy(error = result.error, isLoading = false)
+                        previousState.copy(
+                                error = result.error,
+                                needsAccessToken = true,
+                                isLoading = false
+                        )
                     LoginResult.FetchAccessTokenResult.InFlight ->
-                        previousState.copy(isLoading = true)
+                        previousState.copy(
+                                isLoading = true,
+                                needsAccessToken = false
+                        )
                 }
 
                 is LoginResult.FetchLoginDataResult -> when (result) {
@@ -68,7 +82,10 @@ class LoginViewModel(
                                 userImageUrl = result.userImageUrl,
                                 isLoading = false)
                     is LoginResult.FetchLoginDataResult.Failure ->
-                        previousState.copy(error = result.error, isLoading = false)
+                        previousState.copy(
+                                error = result.error,
+                                isLoading = false
+                        )
                     LoginResult.FetchLoginDataResult.NeedsAccessToken ->
                         previousState.copy(needsAccessToken = true)
                     LoginResult.FetchLoginDataResult.InFlight ->

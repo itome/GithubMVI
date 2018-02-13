@@ -34,7 +34,7 @@ class LoginActivityUI : AnkoComponent<LoginActivity> {
                 .load(state.userImageUrl)
                 .apply(RequestOptions().placeholder(R.color.gray))
                 .into(userImageView)
-        welcomeTextView.text = if (state.userName == "") {
+        welcomeTextView.text = if (state.isLoading) {
             welcomeTextView.context.getString(R.string.fetching_user_data)
         } else {
             welcomeTextView.context.getString(R.string.welcome_message, state.userName)
