@@ -1,6 +1,7 @@
 package com.itome.githubmvi.ui.login
 
 import android.app.Activity
+import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -9,10 +10,12 @@ import com.itome.githubmvi.data.datastore.local.LoginLocalDataStore
 import com.itome.githubmvi.data.datastore.remote.LoginRemoteDataStore
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.mvibase.MviView
+import com.itome.githubmvi.ui.events.EventsActivity
 import com.itome.githubmvi.ui.oauth2.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
+import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.startActivityForResult
 
@@ -74,6 +77,11 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
     }
 
     override fun render(state: LoginViewState) {
+        if (state.startNextActivity) {
+            startActivity(intentFor<EventsActivity>(),
+                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+            finish()
+        }
         ui.applyState(state)
     }
 

@@ -25,7 +25,6 @@ class LoginViewModel(
                 .compose(intentFilter)
                 .map(this::actionFromIntent)
                 .compose(actionProcessorHolder.actionProcessor)
-                .doOnEach { Log.d("RESULT", it.value.toString()) }
                 .scan(LoginViewState.idle(), reducer)
                 .replay(1)
                 .autoConnect(0)
@@ -88,6 +87,8 @@ class LoginViewModel(
                         )
                     LoginResult.FetchLoginDataResult.NeedsAccessToken ->
                         previousState.copy(needsAccessToken = true)
+                    LoginResult.FetchLoginDataResult.StartNextActivity ->
+                        previousState.copy(startNextActivity = true)
                     LoginResult.FetchLoginDataResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }

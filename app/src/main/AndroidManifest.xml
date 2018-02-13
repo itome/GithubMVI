@@ -13,9 +13,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.itome.githubmvi.ui.login.LoginActivity"
-            android:theme="@style/NoActionBar"
-            android:screenOrientation="portrait">
+            android:name=".ui.login.LoginActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -23,9 +23,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.itome.githubmvi.ui.oauth2.OAuth2Activity"
-            android:theme="@style/NoActionBar"
-            android:screenOrientation="portrait"/>
+            android:name=".ui.oauth2.OAuth2Activity"
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
+        <activity android:name=".ui.events.EventsActivity"></activity>
     </application>
 
 </manifest>

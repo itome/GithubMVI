@@ -1,6 +1,7 @@
 package com.itome.githubmvi.ui.login
 
 import com.itome.githubmvi.data.repository.LoginRepository
+import com.itome.githubmvi.extensions.pairWithDelay
 import com.itome.githubmvi.ui.login.LoginResult.FetchAccessTokenResult
 import com.itome.githubmvi.ui.login.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
@@ -50,7 +51,12 @@ class LoginActionProcessorHolder(
     private val getLoginUser =
             repository.getLoginUser()
                     .toObservable()
-                    .map { FetchLoginDataResult.Success(it.name, it.avatar_url) }
+                    .flatMap {
+                        pairWithDelay(1L,
+                                FetchLoginDataResult.Success(it.name, it.avatar_url),
+                                FetchLoginDataResult.StartNextActivity
+                        )
+                    }
 
     internal var actionProcessor =
             ObservableTransformer<LoginAction, LoginResult> { actions ->
