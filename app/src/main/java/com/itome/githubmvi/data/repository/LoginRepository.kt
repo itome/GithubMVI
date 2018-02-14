@@ -4,8 +4,9 @@ import com.itome.githubmvi.data.datastore.local.LoginLocalDataStore
 import com.itome.githubmvi.data.datastore.remote.LoginRemoteDataStore
 import com.itome.githubmvi.data.model.User
 import io.reactivex.Single
+import javax.inject.Inject
 
-class LoginRepository(
+class LoginRepository @Inject constructor(
         private val localDataStore: LoginLocalDataStore,
         private val remoteDataStore: LoginRemoteDataStore
 ) {

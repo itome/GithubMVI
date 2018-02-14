@@ -1,24 +1,23 @@
 package com.itome.githubmvi.ui.login
 
 import android.app.Activity
-import android.app.ActivityOptions
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.itome.githubmvi.BuildConfig
-import com.itome.githubmvi.data.datastore.local.LoginLocalDataStore
-import com.itome.githubmvi.data.datastore.remote.LoginRemoteDataStore
-import com.itome.githubmvi.data.repository.LoginRepository
+import com.itome.githubmvi.di.component.DaggerLoginActivityComponent
+import com.itome.githubmvi.di.module.LoginActivityModule
 import com.itome.githubmvi.mvibase.MviView
+import com.itome.githubmvi.mvibase.MviViewModel
 import com.itome.githubmvi.ui.events.EventsActivity
 import com.itome.githubmvi.ui.oauth2.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.setContentView
 import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
+import javax.inject.Inject
 
 class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> {
 
@@ -26,18 +25,20 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         private const val REQUEST_OAUTH = 0
     }
 
+    @Inject
+    lateinit var viewModel: MviViewModel<LoginIntent, LoginViewState>
+
     private val ui by lazy { LoginActivityUI() }
-    private val viewModel: LoginViewModel by lazy {
-        LoginViewModel(LoginActionProcessorHolder(
-                LoginRepository(LoginLocalDataStore(), LoginRemoteDataStore())
-        ))
-    }
+
     private val fetchAccessTokenIntentPublisher = PublishSubject.create<LoginIntent.FetchAccessTokenIntent>()
     private val fetchLoginDataIntentPublisher = PublishSubject.create<LoginIntent.FetchLoginDataIntent>()
     private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val component = DaggerLoginActivityComponent.builder().loginActivityModule(LoginActivityModule()).build()
+        component.inject(this)
+
         ui.setContentView(this)
 
         ui.oauthButtonClickPublisher.subscribe {
