@@ -17,6 +17,7 @@ import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.intentFor
 import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
 import org.jetbrains.anko.startActivityForResult
 
 class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> {
@@ -78,8 +79,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
     override fun render(state: LoginViewState) {
         if (state.startNextActivity) {
-            startActivity(intentFor<EventsActivity>(),
-                    ActivityOptions.makeSceneTransitionAnimation(this).toBundle())
+            startActivity<EventsActivity>()
             finish()
         }
         ui.applyState(state)
