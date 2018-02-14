@@ -5,8 +5,9 @@ import com.itome.githubmvi.mvibase.MviViewModel
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
+import javax.inject.Inject
 
-class LoginViewModel(
+class LoginViewModel @Inject constructor(
         private val actionProcessorHolder: LoginActionProcessorHolder
 ) : MviViewModel<LoginIntent, LoginViewState> {
 

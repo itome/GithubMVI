@@ -6,8 +6,9 @@ import io.reactivex.Completable
 import io.reactivex.Single
 import io.realm.Realm
 import io.realm.kotlin.where
+import javax.inject.Inject
 
-class LoginLocalDataStore {
+class LoginLocalDataStore @Inject constructor() {
 
     fun readAccessToken(): Single<String> {
         val realm = Realm.getDefaultInstance()

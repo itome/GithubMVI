@@ -5,8 +5,9 @@ import com.itome.githubmvi.data.datastore.LoginService
 import com.itome.githubmvi.data.datastore.RemoteDataStore
 import com.itome.githubmvi.data.model.User
 import io.reactivex.Single
+import javax.inject.Inject
 
-class LoginRemoteDataStore : RemoteDataStore() {
+class LoginRemoteDataStore @Inject constructor() : RemoteDataStore() {
 
     fun fetchAccessToken(clientId: String, clientSecret: String, code: String): Single<String> {
         val baseUrl = "https://github.com/"
