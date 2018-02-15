@@ -2,16 +2,16 @@ package com.itome.githubmvi.ui.login
 
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.extensions.pairWithDelay
+import com.itome.githubmvi.scheduler.SchedulerProvider
 import com.itome.githubmvi.ui.login.LoginResult.FetchAccessTokenResult
 import com.itome.githubmvi.ui.login.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class LoginActionProcessorHolder @Inject constructor(
-        private val repository: LoginRepository
+        private val repository: LoginRepository,
+        private val schedulerProvider: SchedulerProvider
 ) {
 
     private val fetchAccessTokenProcessor =
@@ -28,8 +28,8 @@ class LoginActionProcessorHolder @Inject constructor(
                             }
                             .cast(FetchAccessTokenResult::class.java)
                             .onErrorReturn(FetchAccessTokenResult::Failure)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
                             .startWith(FetchAccessTokenResult.InFlight)
                 }
             }
@@ -55,8 +55,8 @@ class LoginActionProcessorHolder @Inject constructor(
                             }
                             .cast(FetchLoginDataResult::class.java)
                             .onErrorReturn(FetchLoginDataResult::Failure)
-                            .subscribeOn(Schedulers.io())
-                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
                             .startWith(FetchLoginDataResult.InFlight)
                 }
             }
