@@ -19,8 +19,8 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var events: List<Event> = emptyList()
 
-    val userImageClickPublisher = PublishSubject.create<Int>()
-    val itemViewClickPublisher = PublishSubject.create<Int>()
+    val userImageClickPublisher = PublishSubject.create<Int>()!!
+    val itemViewClickPublisher = PublishSubject.create<Int>()!!
 
     override fun getItemCount(): Int = events.size
 
@@ -57,8 +57,8 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         }
 
                         iconImageView = imageView().lparams {
-                            width = dip(16)
-                            height = dip(16)
+                            width = dip(20)
+                            height = dip(20)
                         }
                         dateTextView = textView {
                             textColor = context.getContextColor(R.color.gray)
@@ -89,15 +89,22 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         var event = Event()
             set(value) {
                 field = value
+
                 Glide.with(itemView.context).load(event.actor?.avatar_url)
                         .apply(RequestOptions().placeholder(R.color.gray))
                         .into(avatarImageView)
-                Glide.with(itemView.context).load(event.actor?.avatar_url)
+
+                Glide.with(itemView.context)
+                        .load(event.getEventType().iconResId)
                         .apply(RequestOptions().placeholder(R.color.gray))
                         .into(iconImageView)
+
                 contentsTextView.text = itemView.context.getString(R.string.event_content_text,
-                        event.actor!!.login, "starred", event.repo!!.name
+                        event.actor!!.login,
+                        itemView.context.getString(event.getEventType().actionResId),
+                        event.repo!!.name
                 )
+
                 dateTextView.text = event.created_at
             }
 

@@ -4,4 +4,29 @@
     <string name="welcome_message">Welcome %1$s</string>
     <string name="fetching_user_data">ユーザー情報を取得しています…</string>
     <string name="event_content_text">%1$s %2$s %3$s</string>
+
+    <string name="did_something">did something</string>
+    <string name="starred">starred</string>
+    <string name="created_repo">created</string>
+    <string name="commented_on_commit">commented on commit</string>
+    <string name="downloaded">downloaded</string>
+    <string name="followed">followed</string>
+    <string name="forked">forked</string>
+    <string name="created_gist">created</string>
+    <string name="gollum">have wiki on</string>
+    <string name="commented_on_issue">commented on issue</string>
+    <string name="created_issue">created issue</string>
+    <string name="member">member</string>
+    <string name="public_event">open sourced</string>
+    <string name="pull_request">pull requested</string>
+    <string name="pr_comment_review">commented on pull request on</string>
+    <string name="pr_review_event">reviewed pull request on</string>
+    <string name="repo_event">have repository event on</string>
+    <string name="pushed">pushed</string>
+    <string name="team_event">have team event on</string>
+    <string name="deleted">deleted</string>
+    <string name="released">released</string>
+    <string name="organization_event">have organization event on</string>
+    <string name="card_event">have card event on</string>
+    <string name="project_event">have project event on</string>
 </resources>

@@ -2,6 +2,7 @@ package com.itome.githubmvi.ui.events
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import com.itome.githubmvi.di.component.DaggerEventsAtivityComponent
 import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.EventsActivityModule
@@ -38,12 +39,20 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         component.inject(this)
 
         ui.setContentView(this)
+
+        disposable.add(ui.userImageClickPublisher.subscribe(this::showUserDetailActivity))
+        disposable.add(ui.itemViewClickPublisher.subscribe(this::showRepositoryActivity))
     }
 
     override fun onStart() {
         super.onStart()
         bind()
         fetchEventsIntentPublisher.onNext(FetchEventsIntent)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        disposable.dispose()
     }
 
     override fun intents(): Observable<EventsIntent> {
@@ -62,4 +71,11 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         viewModel.processIntents(intents())
     }
 
+    private fun showUserDetailActivity(userId: Int) {
+        Log.d("ShowUserDetail", "userId: " + userId.toString())
+    }
+
+    private fun showRepositoryActivity(repositoryId: Int) {
+        Log.d("ShowRepositoryActivity", "repositoryId: " + repositoryId.toString())
+    }
 }

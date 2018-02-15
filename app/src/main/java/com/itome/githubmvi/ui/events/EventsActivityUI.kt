@@ -11,6 +11,9 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
 
     private val eventsAdapter = EventsAdapter()
 
+    val userImageClickPublisher = eventsAdapter.userImageClickPublisher
+    val itemViewClickPublisher = eventsAdapter.itemViewClickPublisher
+
     fun applyState(state: EventsViewState) {
         eventsAdapter.events = state.events
         eventsAdapter.notifyDataSetChanged()

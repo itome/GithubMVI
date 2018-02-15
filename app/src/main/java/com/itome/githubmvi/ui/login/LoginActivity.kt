@@ -49,10 +49,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
         ui.setContentView(this)
 
-        ui.oauthButtonClickPublisher.subscribe {
-            val url = "https://github.com/login/oauth/authorize?client_id=${BuildConfig.CLIENT_ID}"
-            startActivityForResult<OAuth2Activity>(REQUEST_OAUTH, OAuth2Activity.URL to url)
-        }
+        disposables.add(ui.oauthButtonClickPublisher.subscribe { showEventsActivity() })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -99,4 +96,8 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         viewModel.processIntents(intents())
     }
 
+    private fun showEventsActivity() {
+        val url = "https://github.com/login/oauth/authorize?client_id=${BuildConfig.CLIENT_ID}"
+        startActivityForResult<OAuth2Activity>(REQUEST_OAUTH, OAuth2Activity.URL to url)
+    }
 }
