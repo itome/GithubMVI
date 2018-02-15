@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.itome.githubmvi.BuildConfig
 import com.itome.githubmvi.di.component.DaggerLoginActivityComponent
+import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.LoginActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
@@ -36,7 +37,10 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val component = DaggerLoginActivityComponent.builder().loginActivityModule(LoginActivityModule()).build()
+        val component = DaggerLoginActivityComponent.builder()
+                .loginActivityModule(LoginActivityModule())
+                .apiModule(ApiModule())
+                .build()
         component.inject(this)
 
         ui.setContentView(this)
