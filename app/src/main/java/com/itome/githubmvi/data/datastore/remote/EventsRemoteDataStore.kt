@@ -8,5 +8,7 @@ import javax.inject.Inject
 class EventsRemoteDataStore @Inject constructor(
         private val apiService: ApiService
 ) {
-    fun fetchEvents(accessToken: String): Single<List<Event>> = apiService.getEvents(accessToken)
+    fun fetchEvents(
+            accessToken: String, userName: String
+    ): Single<List<Event>> = apiService.getEvents(accessToken, userName)
 }

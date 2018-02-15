@@ -21,8 +21,9 @@ interface ApiService {
             @Path("username") user: String
     ): Single<User>
 
-    @GET("events")
+    @GET("users/{username}/received_events")
     fun getEvents(
-            @Header("Authorization") accessToken: String
+            @Header("Authorization") accessToken: String,
+            @Path("username") userName: String
     ): Single<List<Event>>
 }

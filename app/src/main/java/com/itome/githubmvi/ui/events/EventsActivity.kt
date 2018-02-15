@@ -2,7 +2,6 @@ package com.itome.githubmvi.ui.events
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.itome.githubmvi.di.component.DaggerEventsAtivityComponent
 import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.EventsActivityModule
@@ -55,7 +54,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     }
 
     override fun render(state: EventsViewState) {
-        Log.d("EventsViewState", state.toString())
+        ui.applyState(state)
     }
 
     private fun bind() {

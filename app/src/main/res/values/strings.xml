@@ -3,4 +3,5 @@
     <string name="authorize_app">Authorize App</string>
     <string name="welcome_message">Welcome %1$s</string>
     <string name="fetching_user_data">ユーザー情報を取得しています…</string>
+    <string name="event_content_text">%1$s %2$s %3$s</string>
 </resources>

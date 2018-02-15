@@ -12,10 +12,9 @@ class EventsRepository @Inject constructor(
 ) {
 
     fun getEvents(): Single<List<Event>> {
-        return loginLocalDataStore.readAccessToken()
-                .flatMap { accessToken ->
-                    remoteDataStore.fetchEvents(accessToken)
+        return loginLocalDataStore.readLoginData()
+                .flatMap { loginData ->
+                    remoteDataStore.fetchEvents(loginData.accessToken, loginData.loginUser!!.name)
                 }
     }
-
 }

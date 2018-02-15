@@ -47,4 +47,17 @@ class LoginLocalDataStore @Inject constructor() {
         realm.close()
         return Completable.complete()
     }
+
+    fun readLoginData(): Single<LoginData> {
+        return Single.create {
+            val realm = Realm.getDefaultInstance()
+            val loginData = realm.where<LoginData>().findFirst()
+            if (loginData != null) {
+                it.onSuccess(realm.copyFromRealm(loginData))
+            } else {
+                it.onError(NullPointerException())
+            }
+            realm.close()
+        }
+    }
 }
