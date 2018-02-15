@@ -1,4 +1,4 @@
-package com.itome.githubmvi.ui.events
+package com.itome.githubmvi.ui.events.core
 
 import com.itome.githubmvi.mvibase.MviIntent
 

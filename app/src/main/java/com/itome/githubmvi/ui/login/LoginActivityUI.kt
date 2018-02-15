@@ -10,6 +10,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.setVisibility
+import com.itome.githubmvi.ui.login.core.LoginViewState
 import com.itome.githubmvi.ui.widget.circleImageView
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*

@@ -1,4 +1,4 @@
-package com.itome.githubmvi.ui.login
+package com.itome.githubmvi.ui.login.core
 
 import com.itome.githubmvi.mvibase.MviAction
 

@@ -1,4 +1,4 @@
-package com.itome.githubmvi.ui.events
+package com.itome.githubmvi.ui.events.core
 
 import com.itome.githubmvi.data.model.Event
 import com.itome.githubmvi.mvibase.MviResult

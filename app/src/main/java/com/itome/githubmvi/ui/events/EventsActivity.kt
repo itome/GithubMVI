@@ -8,8 +8,10 @@ import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.EventsActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
-import com.itome.githubmvi.ui.events.EventsIntent.FetchEventsIntent
-import com.itome.githubmvi.ui.events.EventsIntent.FetchEventsPageIntent
+import com.itome.githubmvi.ui.events.core.EventsIntent
+import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsIntent
+import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsPageIntent
+import com.itome.githubmvi.ui.events.core.EventsViewState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject

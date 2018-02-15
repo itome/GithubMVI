@@ -1,9 +1,9 @@
-package com.itome.githubmvi.ui.events
+package com.itome.githubmvi.ui.events.core
 
 import com.itome.githubmvi.mvibase.MviViewModel
-import com.itome.githubmvi.ui.events.EventsResult.*
-import com.itome.githubmvi.ui.events.EventsIntent.*
-import com.itome.githubmvi.ui.events.EventsAction.*
+import com.itome.githubmvi.ui.events.core.EventsResult.*
+import com.itome.githubmvi.ui.events.core.EventsIntent.*
+import com.itome.githubmvi.ui.events.core.EventsAction.*
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject

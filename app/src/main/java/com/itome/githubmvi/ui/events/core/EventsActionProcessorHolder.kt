@@ -1,11 +1,11 @@
-package com.itome.githubmvi.ui.events
+package com.itome.githubmvi.ui.events.core
 
 import com.itome.githubmvi.data.repository.EventsRepository
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.events.EventsAction.FetchEventsAction
-import com.itome.githubmvi.ui.events.EventsAction.FetchEventsPageAction
-import com.itome.githubmvi.ui.events.EventsResult.FetchEventsPageResult
-import com.itome.githubmvi.ui.events.EventsResult.FetchEventsResult
+import com.itome.githubmvi.ui.events.core.EventsAction.FetchEventsAction
+import com.itome.githubmvi.ui.events.core.EventsAction.FetchEventsPageAction
+import com.itome.githubmvi.ui.events.core.EventsResult.FetchEventsPageResult
+import com.itome.githubmvi.ui.events.core.EventsResult.FetchEventsResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject

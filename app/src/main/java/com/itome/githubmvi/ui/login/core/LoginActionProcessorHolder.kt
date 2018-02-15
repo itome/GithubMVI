@@ -1,12 +1,12 @@
-package com.itome.githubmvi.ui.login
+package com.itome.githubmvi.ui.login.core
 
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.extensions.pairWithDelay
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.login.LoginAction.FetchAccessTokenAction
-import com.itome.githubmvi.ui.login.LoginAction.FetchLoginDataAction
-import com.itome.githubmvi.ui.login.LoginResult.FetchAccessTokenResult
-import com.itome.githubmvi.ui.login.LoginResult.FetchLoginDataResult
+import com.itome.githubmvi.ui.login.core.LoginAction.FetchAccessTokenAction
+import com.itome.githubmvi.ui.login.core.LoginAction.FetchLoginDataAction
+import com.itome.githubmvi.ui.login.core.LoginResult.FetchAccessTokenResult
+import com.itome.githubmvi.ui.login.core.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject

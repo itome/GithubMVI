@@ -11,8 +11,10 @@ import com.itome.githubmvi.di.module.LoginActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
 import com.itome.githubmvi.ui.events.EventsActivity
-import com.itome.githubmvi.ui.login.LoginIntent.FetchAccessTokenIntent
-import com.itome.githubmvi.ui.login.LoginIntent.FetchLoginDataIntent
+import com.itome.githubmvi.ui.login.core.LoginIntent
+import com.itome.githubmvi.ui.login.core.LoginIntent.FetchAccessTokenIntent
+import com.itome.githubmvi.ui.login.core.LoginIntent.FetchLoginDataIntent
+import com.itome.githubmvi.ui.login.core.LoginViewState
 import com.itome.githubmvi.ui.oauth2.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
