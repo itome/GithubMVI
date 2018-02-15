@@ -11,6 +11,8 @@ import com.itome.githubmvi.di.module.LoginActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
 import com.itome.githubmvi.ui.events.EventsActivity
+import com.itome.githubmvi.ui.login.LoginIntent.FetchAccessTokenIntent
+import com.itome.githubmvi.ui.login.LoginIntent.FetchLoginDataIntent
 import com.itome.githubmvi.ui.oauth2.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -31,8 +33,8 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
     private val ui by lazy { LoginActivityUI() }
 
-    private val fetchAccessTokenIntentPublisher = PublishSubject.create<LoginIntent.FetchAccessTokenIntent>()
-    private val fetchLoginDataIntentPublisher = PublishSubject.create<LoginIntent.FetchLoginDataIntent>()
+    private val fetchAccessTokenIntentPublisher = PublishSubject.create<FetchAccessTokenIntent>()
+    private val fetchLoginDataIntentPublisher = PublishSubject.create<FetchLoginDataIntent>()
     private val disposables = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +58,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         if (requestCode == REQUEST_OAUTH && resultCode == Activity.RESULT_OK) {
             val code = data?.getStringExtra(OAuth2Activity.CODE)!!
             fetchAccessTokenIntentPublisher.onNext(
-                    LoginIntent.FetchAccessTokenIntent(
+                    FetchAccessTokenIntent(
                             BuildConfig.CLIENT_ID,
                             BuildConfig.CLIENT_SECRET,
                             code)
@@ -67,7 +69,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
     override fun onStart() {
         super.onStart()
         bind()
-        fetchLoginDataIntentPublisher.onNext(LoginIntent.FetchLoginDataIntent)
+        fetchLoginDataIntentPublisher.onNext(FetchLoginDataIntent)
     }
 
     override fun onDestroy() {
@@ -77,8 +79,8 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
     override fun intents(): Observable<LoginIntent> {
         return Observable.merge(
-                fetchAccessTokenIntent(),
-                fetchSelfDataIntent()
+                fetchAccessTokenIntentPublisher,
+                fetchLoginDataIntentPublisher
         )
     }
 
@@ -95,11 +97,4 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         viewModel.processIntents(intents())
     }
 
-    private fun fetchAccessTokenIntent(): Observable<LoginIntent.FetchAccessTokenIntent> {
-        return fetchAccessTokenIntentPublisher
-    }
-
-    private fun fetchSelfDataIntent(): Observable<LoginIntent.FetchLoginDataIntent> {
-        return fetchLoginDataIntentPublisher
-    }
 }

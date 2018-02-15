@@ -2,6 +2,12 @@ package com.itome.githubmvi.ui.login
 
 import com.itome.githubmvi.extensions.notOfType
 import com.itome.githubmvi.mvibase.MviViewModel
+import com.itome.githubmvi.ui.login.LoginAction.FetchAccessTokenAction
+import com.itome.githubmvi.ui.login.LoginAction.FetchLoginDataAction
+import com.itome.githubmvi.ui.login.LoginIntent.FetchAccessTokenIntent
+import com.itome.githubmvi.ui.login.LoginIntent.FetchLoginDataIntent
+import com.itome.githubmvi.ui.login.LoginResult.FetchAccessTokenResult
+import com.itome.githubmvi.ui.login.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import io.reactivex.subjects.PublishSubject
@@ -34,18 +40,17 @@ class LoginViewModel @Inject constructor(
         get() = ObservableTransformer { intents ->
             intents.publish { shared ->
                 Observable.merge(
-                        shared.ofType(LoginIntent.FetchAccessTokenIntent::class.java).take(1),
-                        shared.notOfType(LoginIntent.FetchAccessTokenIntent::class.java)
+                        shared.ofType(FetchAccessTokenIntent::class.java).take(1),
+                        shared.notOfType(FetchAccessTokenIntent::class.java)
                 )
             }
         }
 
     private fun actionFromIntent(intent: LoginIntent): LoginAction {
         return when (intent) {
-            LoginIntent.FetchLoginDataIntent ->
-                LoginAction.FetchLoginDataAction
-            is LoginIntent.FetchAccessTokenIntent ->
-                LoginAction.FetchAccessTokenAction(intent.clientId, intent.clientSecret, intent.code)
+            FetchLoginDataIntent -> FetchLoginDataAction
+            is FetchAccessTokenIntent ->
+                FetchAccessTokenAction(intent.clientId, intent.clientSecret, intent.code)
         }
     }
 
@@ -53,49 +58,49 @@ class LoginViewModel @Inject constructor(
         private val reducer = { previousState: LoginViewState, result: LoginResult ->
             when (result) {
 
-                is LoginResult.FetchAccessTokenResult -> when (result) {
-                    is LoginResult.FetchAccessTokenResult.Success ->
+                is FetchAccessTokenResult -> when (result) {
+                    is FetchAccessTokenResult.Success ->
                         previousState.copy(
                                 userName = result.userName,
                                 userImageUrl = result.userImageUrl,
                                 needsAccessToken = false,
                                 isLoading = false
                         )
-                    is LoginResult.FetchAccessTokenResult.Failure ->
+                    is FetchAccessTokenResult.Failure ->
                         previousState.copy(
                                 error = result.error,
                                 needsAccessToken = true,
                                 isLoading = false
                         )
-                    LoginResult.FetchAccessTokenResult.StartNextActivity ->
+                    FetchAccessTokenResult.StartNextActivity ->
                         previousState.copy(
                                 needsAccessToken = false,
                                 startNextActivity = true,
                                 isLoading = false
                         )
-                    LoginResult.FetchAccessTokenResult.InFlight ->
+                    FetchAccessTokenResult.InFlight ->
                         previousState.copy(
                                 isLoading = true,
                                 needsAccessToken = false
                         )
                 }
 
-                is LoginResult.FetchLoginDataResult -> when (result) {
-                    is LoginResult.FetchLoginDataResult.Success ->
+                is FetchLoginDataResult -> when (result) {
+                    is FetchLoginDataResult.Success ->
                         previousState.copy(
                                 userName = result.userName,
                                 userImageUrl = result.userImageUrl,
                                 isLoading = false)
-                    is LoginResult.FetchLoginDataResult.Failure ->
+                    is FetchLoginDataResult.Failure ->
                         previousState.copy(
                                 error = result.error,
                                 isLoading = false
                         )
-                    LoginResult.FetchLoginDataResult.NeedsAccessToken ->
+                    FetchLoginDataResult.NeedsAccessToken ->
                         previousState.copy(needsAccessToken = true)
-                    LoginResult.FetchLoginDataResult.StartNextActivity ->
+                    FetchLoginDataResult.StartNextActivity ->
                         previousState.copy(startNextActivity = true)
-                    LoginResult.FetchLoginDataResult.InFlight ->
+                    FetchLoginDataResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }
             }

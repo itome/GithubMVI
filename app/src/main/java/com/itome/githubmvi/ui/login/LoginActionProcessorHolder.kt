@@ -3,6 +3,8 @@ package com.itome.githubmvi.ui.login
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.extensions.pairWithDelay
 import com.itome.githubmvi.scheduler.SchedulerProvider
+import com.itome.githubmvi.ui.login.LoginAction.FetchAccessTokenAction
+import com.itome.githubmvi.ui.login.LoginAction.FetchLoginDataAction
 import com.itome.githubmvi.ui.login.LoginResult.FetchAccessTokenResult
 import com.itome.githubmvi.ui.login.LoginResult.FetchLoginDataResult
 import io.reactivex.Observable
@@ -15,7 +17,7 @@ class LoginActionProcessorHolder @Inject constructor(
 ) {
 
     private val fetchAccessTokenProcessor =
-            ObservableTransformer<LoginAction.FetchAccessTokenAction, FetchAccessTokenResult> { actions ->
+            ObservableTransformer<FetchAccessTokenAction, FetchAccessTokenResult> { actions ->
                 actions.flatMap { action ->
                     repository.fetchAccessToken(action.clientId, action.clientSecret, action.code)
                             .flatMap { repository.fetchLoginUser() }
@@ -35,7 +37,7 @@ class LoginActionProcessorHolder @Inject constructor(
             }
 
     private val fetchLoginDataProcessor =
-            ObservableTransformer<LoginAction.FetchLoginDataAction, LoginResult.FetchLoginDataResult> { actions ->
+            ObservableTransformer<FetchLoginDataAction, FetchLoginDataResult> { actions ->
                 actions.flatMap {
                     repository.readAccessToken()
                             .toObservable()
@@ -65,12 +67,12 @@ class LoginActionProcessorHolder @Inject constructor(
             ObservableTransformer<LoginAction, LoginResult> { actions ->
                 actions.publish { shared ->
                     Observable.merge(
-                            shared.ofType(LoginAction.FetchAccessTokenAction::class.java).compose(fetchAccessTokenProcessor),
-                            shared.ofType(LoginAction.FetchLoginDataAction::class.java).compose(fetchLoginDataProcessor)
+                            shared.ofType(FetchAccessTokenAction::class.java).compose(fetchAccessTokenProcessor),
+                            shared.ofType(FetchLoginDataAction::class.java).compose(fetchLoginDataProcessor)
                     ).mergeWith(
                             shared.filter({ v ->
-                                v !is LoginAction.FetchAccessTokenAction
-                                        && v != LoginAction.FetchLoginDataAction
+                                v !is FetchAccessTokenAction
+                                        && v != FetchLoginDataAction
                             }).flatMap({ w ->
                                 Observable.error<LoginResult>(
                                         IllegalArgumentException("Unknown Action type: $w"))
