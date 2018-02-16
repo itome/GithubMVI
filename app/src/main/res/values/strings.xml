@@ -4,6 +4,7 @@
     <string name="welcome_message">Welcome %1$s</string>
     <string name="fetching_user_data">ユーザー情報を取得しています…</string>
     <string name="event_content_text">%1$s %2$s %3$s</string>
+    <string name="day_diff">%1$d days ago</string>
 
     <string name="did_something">did something</string>
     <string name="starred">starred</string>

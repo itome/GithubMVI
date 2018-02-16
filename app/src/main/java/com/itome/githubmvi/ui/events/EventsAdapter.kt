@@ -1,5 +1,6 @@
 package com.itome.githubmvi.ui.events
 
+import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.Gravity
 import android.view.View
@@ -15,6 +16,8 @@ import com.itome.githubmvi.extensions.getContextDrawable
 import com.itome.githubmvi.ui.widget.circleImageView
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -100,7 +103,6 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
                 Glide.with(itemView.context)
                         .load(event.getEventType().iconResId)
-                        .apply(RequestOptions().placeholder(R.color.gray))
                         .into(iconImageView)
 
                 contentsTextView.text = itemView.context.getString(R.string.event_content_text,
@@ -109,12 +111,23 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                         event.repo!!.name
                 )
 
-                dateTextView.text = event.created_at
+                dateTextView.text = formatDate(itemView.context, event.created_at)
             }
 
         init {
             avatarImageView.setOnClickListener { userImageClickPublisher.onNext(event.actor!!.id) }
             itemView.setOnClickListener { itemViewClickPublisher.onNext(event.repo!!.id) }
+        }
+
+        private fun formatDate(context: Context, dateText: String): String {
+            val originalFormat = SimpleDateFormat("yyyy-MM-dd", Locale.US)
+            val dateFormat = SimpleDateFormat("yyyy/MM/dd", Locale.US)
+            val date = originalFormat.parse(dateText)
+            val dayDiff = ((Date().time - date.time) / (1000 * 60 * 60 * 24)).toInt()
+            return when (dayDiff) {
+                in 1..5 -> context.getString(R.string.day_diff, dayDiff)
+                else -> dateFormat.format(date)
+            }
         }
     }
 }
