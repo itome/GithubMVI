@@ -29,6 +29,9 @@
         <activity
             android:name=".ui.events.EventsActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.repository.RepositoryActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

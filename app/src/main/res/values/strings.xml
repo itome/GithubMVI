@@ -30,4 +30,8 @@
     <string name="organization_event">have organization event on</string>
     <string name="card_event">have card event on</string>
     <string name="project_event">have project event on</string>
+
+    <string name="stars">stars</string>
+    <string name="watches">watches</string>
+    <string name="forks">forks</string>
 </resources>

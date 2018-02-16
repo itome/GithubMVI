@@ -8,8 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-
-    <style name = "NoActionBar" parent ="Theme.AppCompat.Light">
+    <style name = "NoActionBar" parent ="Theme.AppCompat.Light.DarkActionBar">
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
         <item name="android:windowContentOverlay">@null</item>

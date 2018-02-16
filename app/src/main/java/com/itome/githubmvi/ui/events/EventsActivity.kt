@@ -12,10 +12,12 @@ import com.itome.githubmvi.ui.events.core.EventsIntent
 import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsIntent
 import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsPageIntent
 import com.itome.githubmvi.ui.events.core.EventsViewState
+import com.itome.githubmvi.ui.repository.RepositoryActivity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
 class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewState> {
@@ -76,6 +78,6 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     }
 
     private fun showRepositoryActivity(repositoryId: Int) {
-        Log.d("ShowRepositoryActivity", "repositoryId: " + repositoryId.toString())
+        startActivity<RepositoryActivity>(RepositoryActivity.REPOSITORY_ID to repositoryId)
     }
 }
