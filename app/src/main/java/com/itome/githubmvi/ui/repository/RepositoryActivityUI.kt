@@ -4,8 +4,8 @@ import android.view.Gravity
 import android.widget.TextView
 import com.itome.githubmvi.R
 import com.itome.githubmvi.extensions.getContextColor
-import com.itome.githubmvi.ui.widget.cardView
 import org.jetbrains.anko.*
+import org.jetbrains.anko.cardview.v7.cardView
 
 class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
 

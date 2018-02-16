@@ -16,6 +16,7 @@ import com.itome.githubmvi.extensions.getContextDrawable
 import com.itome.githubmvi.ui.widget.circleImageView
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
+import org.jetbrains.anko.cardview.v7.cardView
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -34,7 +35,9 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         lateinit var iconImageView: ImageView
         lateinit var dateTextView: TextView
 
-        val itemView = parent.context.frameLayout {
+        val itemView = parent.context.cardView {
+            cardElevation = dip(4).toFloat()
+            useCompatPadding = true
             lparams(matchParent, wrapContent)
 
             linearLayout {
