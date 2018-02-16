@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
 import com.itome.githubmvi.data.model.Event
 import com.itome.githubmvi.extensions.getContextColor
+import com.itome.githubmvi.extensions.getContextDrawable
 import com.itome.githubmvi.ui.widget.circleImageView
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
@@ -31,8 +32,11 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         lateinit var dateTextView: TextView
 
         val itemView = parent.context.frameLayout {
+            lparams(matchParent, wrapContent)
+
             linearLayout {
                 lparams(matchParent, wrapContent)
+                background = parent.context.getContextDrawable(R.drawable.bg_ripple)
 
                 avatarImageView = circleImageView().lparams {
                     width = dip(44)
