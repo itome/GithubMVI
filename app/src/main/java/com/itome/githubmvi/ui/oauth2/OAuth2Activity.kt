@@ -43,6 +43,7 @@ class OAuth2Activity : AppCompatActivity() {
             super.onPageStarted(view, url, favicon)
             url ?: return
             if (url.startsWith("github-mvi://")) {
+                view?.stopLoading()
                 val code = Uri.parse(url).getQueryParameter("code")
                 val data = Intent().also { it.putExtra(CODE, code) }
                 setResult(Activity.RESULT_OK, data)
