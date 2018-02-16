@@ -54,11 +54,15 @@ class LoginActivityUI : AnkoComponent<LoginActivity> {
                 }
 
                 welcomeTextView = textView {
-                    width = wrapContent
                     textColor = context.getContextColor(R.color.black)
                     textSize = 14F
+                }.lparams {
+                    width = wrapContent
+                    height = wrapContent
                 }
             }.lparams {
+                width = wrapContent
+                height = wrapContent
                 gravity = Gravity.CENTER
             }
 
@@ -84,6 +88,8 @@ class LoginActivityUI : AnkoComponent<LoginActivity> {
                     width = wrapContent
                 }
             }.lparams {
+                width = wrapContent
+                height = wrapContent
                 gravity = Gravity.CENTER
             }
         }
