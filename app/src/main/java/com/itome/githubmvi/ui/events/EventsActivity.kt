@@ -2,8 +2,7 @@ package com.itome.githubmvi.ui.events
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import com.itome.githubmvi.di.component.DaggerEventsAtivityComponent
+import com.itome.githubmvi.di.component.DaggerEventsActivityComponent
 import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.EventsActivityModule
 import com.itome.githubmvi.mvibase.MviView
@@ -35,7 +34,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val component = DaggerEventsAtivityComponent.builder()
+        val component = DaggerEventsActivityComponent.builder()
                 .eventsActivityModule(EventsActivityModule())
                 .apiModule(ApiModule())
                 .build()

@@ -5,6 +5,7 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.widget.ImageView
 import com.itome.githubmvi.R
+import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import org.jetbrains.anko.*
 import org.jetbrains.anko.design.collapsingToolbarLayout
 import org.jetbrains.anko.design.coordinatorLayout
@@ -13,6 +14,9 @@ import org.jetbrains.anko.support.v4.nestedScrollView
 
 
 class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
+
+    fun applyState(state: UserDetailViewState) {
+    }
 
     override fun createView(ui: AnkoContext<UserDetailActivity>) = with(ui) {
         coordinatorLayout {

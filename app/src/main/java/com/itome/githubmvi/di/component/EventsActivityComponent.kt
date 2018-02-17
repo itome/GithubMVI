@@ -13,6 +13,6 @@ import javax.inject.Singleton
     (ApiModule::class),
     (SchedulerModule::class)]
 )
-interface EventsAtivityComponent {
+interface EventsActivityComponent {
     fun inject(activity: EventsActivity)
 }
