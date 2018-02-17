@@ -93,7 +93,7 @@ class UserDetailViewModel @Inject constructor(
                 is UnFollowResult -> when (result) {
                     UnFollowResult.Success -> previousState.copy(
                             isFollowed = false,
-                            user = previousState.user?.minulFollowerCount()
+                            user = previousState.user?.minusFollowerCount()
                     )
                     is UnFollowResult.Failure -> previousState.copy(error = result.error)
                 }

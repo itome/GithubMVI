@@ -39,7 +39,7 @@ open class User(
         )
     }
 
-    fun minulFollowerCount(): User {
+    fun minusFollowerCount(): User {
         return User(
                 id = this.id,
                 login = this.login,
