@@ -8,7 +8,7 @@ open class Repository(
 
         var full_name: String = "",
 
-        var description: String = "",
+        var description: String? = "",
 
         var forks_count: Int = 0,
 

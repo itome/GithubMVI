@@ -8,7 +8,7 @@ import io.realm.annotations.RealmClass
 open class User(
 
         @PrimaryKey
-        var id: Int = 0,
+        var id: Int? = 0,
 
         var login: String = "",
 
@@ -16,9 +16,9 @@ open class User(
 
         var avatar_url: String = "",
 
-        var bio: String = "",
+        var bio: String? = "",
 
-        var email: String = "",
+        var email: String? = "",
 
         var followers: Int = 0,
 
