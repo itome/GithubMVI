@@ -25,4 +25,11 @@ class UserRepository @Inject constructor(
                     remoteDataStore.fetchUserRepos(accessToken, userName)
                 }
     }
+
+    fun checkIsFollowed(userName: String): Single<Boolean> {
+        return loginLocalDataStore.readAccessToken()
+                .flatMap { accessToken ->
+                    remoteDataStore.checkIsFollowed(accessToken, userName)
+                }
+    }
 }

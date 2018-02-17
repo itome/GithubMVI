@@ -1,12 +1,9 @@
 package com.itome.githubmvi.ui.userdetail.core
 
 import com.itome.githubmvi.mvibase.MviViewModel
-import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.FetchUserAction
-import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.FetchUserReposAction
-import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.FetchUserIntent
-import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.FetchUserReposIntent
-import com.itome.githubmvi.ui.userdetail.core.UserDetailResult.FetchUserReposResult
-import com.itome.githubmvi.ui.userdetail.core.UserDetailResult.FetchUserResult
+import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.*
+import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.*
+import com.itome.githubmvi.ui.userdetail.core.UserDetailResult.*
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
@@ -37,6 +34,9 @@ class UserDetailViewModel @Inject constructor(
         return when (intent) {
             is FetchUserIntent -> FetchUserAction(intent.userName)
             is FetchUserReposIntent -> FetchUserReposAction(intent.userName)
+            is CheckIsFollowedIntent -> CheckIsFollowedAction(intent.userName)
+            FollowIntent -> FollowAction
+            UnFollowIntent -> UnFollowAction
         }
     }
 
@@ -67,6 +67,29 @@ class UserDetailViewModel @Inject constructor(
                         previousState.copy(error = result.error, isLoading = false)
                     FetchUserReposResult.InFlight ->
                         previousState.copy(isLoading = true)
+                }
+
+                is CheckIsFollowedResult -> when (result) {
+                    is CheckIsFollowedResult.Success ->
+                        previousState.copy(
+                                isFollowed = result.isFollowed,
+                                error = null,
+                                isLoading = false
+                        )
+                    is CheckIsFollowedResult.Failure ->
+                        previousState.copy(error = result.error, isLoading = false)
+                    CheckIsFollowedResult.InFlight ->
+                        previousState.copy(isLoading = true)
+                }
+
+                is FollowResult -> when (result) {
+                    FollowResult.Success -> previousState.copy(isFollowed = true)
+                    is FollowResult.Failure -> previousState.copy(error = result.error)
+                }
+
+                is UnFollowResult -> when (result) {
+                    UnFollowResult.Success -> previousState.copy(isFollowed = false)
+                    is UnFollowResult.Failure -> previousState.copy(error = result.error)
                 }
             }
         }

@@ -5,13 +5,13 @@ import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.itome.githubmvi.di.component.DaggerUserDetailActivityComponent
 import com.itome.githubmvi.di.module.ApiModule
+import com.itome.githubmvi.di.module.OkHttpModule
 import com.itome.githubmvi.di.module.UserDetailActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
 import com.itome.githubmvi.ui.repository.RepositoryActivity
 import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent
-import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.FetchUserIntent
-import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.FetchUserReposIntent
+import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.*
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
@@ -33,6 +33,9 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
 
     private val fetchUserIntentPublisher = PublishSubject.create<FetchUserIntent>()
     private val fetchUserReposIntentPublisher = PublishSubject.create<FetchUserReposIntent>()
+    private val checkIsFollowedIntentPublisher = PublishSubject.create<CheckIsFollowedIntent>()
+    private val followIntentPublisher = PublishSubject.create<FollowIntent>()
+    private val unFollowIntentPublisher = PublishSubject.create<UnFollowIntent>()
     private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,19 +45,27 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
         val component = DaggerUserDetailActivityComponent.builder()
                 .userDetailActivityModule(UserDetailActivityModule())
                 .apiModule(ApiModule())
+                .okHttpModule(OkHttpModule())
                 .build()
         component.inject(this)
 
         setSupportActionBar(ui.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         disposable.add(ui.repositoryClickPublisher.subscribe(this::showRepositoryActivity))
+        disposable.add(ui.followClickPublisher.subscribe {
+            followIntentPublisher.onNext(FollowIntent)
+        })
+        disposable.add(ui.unFollowClickPublisher.subscribe {
+            unFollowIntentPublisher.onNext(UnFollowIntent)
+        })
     }
 
     override fun onStart() {
         super.onStart()
         bind()
-        fetchUserIntentPublisher.onNext(UserDetailIntent.FetchUserIntent(userName))
-        fetchUserReposIntentPublisher.onNext(UserDetailIntent.FetchUserReposIntent(userName))
+        fetchUserIntentPublisher.onNext(FetchUserIntent(userName))
+        fetchUserReposIntentPublisher.onNext(FetchUserReposIntent(userName))
+        checkIsFollowedIntentPublisher.onNext(CheckIsFollowedIntent(userName))
     }
 
     override fun onDestroy() {
@@ -73,7 +84,11 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     }
 
     override fun intents(): Observable<UserDetailIntent> {
-        return Observable.merge(fetchUserIntentPublisher, fetchUserReposIntentPublisher)
+        return Observable.merge(
+                fetchUserIntentPublisher,
+                fetchUserReposIntentPublisher,
+                checkIsFollowedIntentPublisher
+        )
     }
 
     override fun render(state: UserDetailViewState) {

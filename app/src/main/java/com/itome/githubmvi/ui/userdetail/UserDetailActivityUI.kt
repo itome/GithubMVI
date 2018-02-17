@@ -1,5 +1,6 @@
 package com.itome.githubmvi.ui.userdetail
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.ColorDrawable
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
@@ -22,6 +23,7 @@ import com.itome.githubmvi.extensions.getResourceId
 import com.itome.githubmvi.extensions.setVisibility
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import com.itome.githubmvi.ui.widget.circleImageView
+import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.glide.transformations.BlurTransformation
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.toolbar
@@ -36,6 +38,8 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
 
     val repositoryClickPublisher
         get() = reposAdapter.itemViewClickPublisher
+    val followClickPublisher = PublishSubject.create<String>()!!
+    val unFollowClickPublisher = PublishSubject.create<String>()!!
 
     lateinit var toolbar: Toolbar
     private val fabAnchorId = View.generateViewId()
@@ -48,7 +52,7 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
     private lateinit var emailTextView: TextView
     private lateinit var followingCountView: TextView
     private lateinit var followerCountView: TextView
-    private lateinit var floatingActionButton: FloatingActionButton
+    private lateinit var fab: FloatingActionButton
     private val reposAdapter = UserReposAdapter()
 
     fun applyState(state: UserDetailViewState) {
@@ -69,6 +73,16 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
         followerCountView.text = state.user?.followers?.toString() ?: "0"
         dividerTextView.setVisibility(state.user?.email?.isNotEmpty() ?: false)
         emailImageView.setVisibility(state.user?.email?.isNotEmpty() ?: false)
+
+        if (state.isFollowed) {
+            fab.backgroundTintList = ColorStateList.valueOf(fab.context.getContextColor(R.color.red))
+            fab.imageResource = R.drawable.ic_unfollow
+            fab.setOnClickListener { unFollowClickPublisher.onNext(state.user?.login ?: "") }
+        } else {
+            fab.backgroundTintList = ColorStateList.valueOf(fab.context.getContextColor(R.color.green))
+            fab.imageResource = R.drawable.ic_follow
+            fab.setOnClickListener { followClickPublisher.onNext(state.user?.login ?: "") }
+        }
 
         state.repos?.let { repos ->
             reposAdapter.repos = repos
@@ -178,7 +192,7 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                 }
             }
 
-            floatingActionButton = floatingActionButton().lparams {
+            fab = floatingActionButton().lparams {
                 anchorId = fabAnchorId
                 anchorGravity = Gravity.BOTTOM or Gravity.END
                 margin = dip(8)

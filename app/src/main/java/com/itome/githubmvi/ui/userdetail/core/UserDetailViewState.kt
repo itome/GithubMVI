@@ -7,6 +7,7 @@ import com.itome.githubmvi.mvibase.MviViewState
 data class UserDetailViewState(
         val user: User?,
         val repos: List<Repository>?,
+        val isFollowed: Boolean,
         val error: Throwable?,
         val isLoading: Boolean
 ): MviViewState {
@@ -15,6 +16,7 @@ data class UserDetailViewState(
             return UserDetailViewState(
                     user = null,
                     repos = null,
+                    isFollowed = false,
                     error = null,
                     isLoading = false
             )
