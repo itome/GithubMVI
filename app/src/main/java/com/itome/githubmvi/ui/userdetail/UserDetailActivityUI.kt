@@ -1,68 +1,181 @@
 package com.itome.githubmvi.ui.userdetail
 
-import android.graphics.Color.WHITE
+import android.graphics.drawable.ColorDrawable
 import android.support.design.widget.AppBarLayout
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.design.widget.CollapsingToolbarLayout
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+import android.support.design.widget.CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.Toolbar
+import android.view.Gravity
+import android.view.View
 import android.widget.ImageView
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
+import com.itome.githubmvi.extensions.getContextColor
+import com.itome.githubmvi.extensions.getResourceId
+import com.itome.githubmvi.extensions.setVisibility
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
+import com.itome.githubmvi.ui.widget.circleImageView
+import jp.wasabeef.glide.transformations.BlurTransformation
 import org.jetbrains.anko.*
-import org.jetbrains.anko.design.appBarLayout
+import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.collapsingToolbarLayout
 import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 
 
 class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
 
-    private val reposAdapter = UserReposAdapter()
-    private lateinit var headerImageView: ImageView
+    val repositoryClickPublisher
+        get() = reposAdapter.itemViewClickPublisher
 
-    val repositoryClickPublisher = reposAdapter.itemViewClickPublisher
+    lateinit var toolbar: Toolbar
+    private val fabAnchorId = View.generateViewId()
+    private lateinit var headerImageView: ImageView
+    private lateinit var emailImageView: ImageView
+    private lateinit var userCircleImageView: ImageView
+    private lateinit var loginNameTextView: TextView
+    private lateinit var fullNameTextView: TextView
+    private lateinit var dividerTextView: TextView
+    private lateinit var emailTextView: TextView
+    private lateinit var followingCountView: TextView
+    private lateinit var followerCountView: TextView
+    private lateinit var floatingActionButton: FloatingActionButton
+    private val reposAdapter = UserReposAdapter()
 
     fun applyState(state: UserDetailViewState) {
+        Glide.with(headerImageView.context)
+                .load(state.user?.avatar_url)
+                .apply(RequestOptions().placeholder(R.color.black))
+                .apply(RequestOptions.bitmapTransform(BlurTransformation(100)))
+                .into(headerImageView)
+        Glide.with(userCircleImageView)
+                .load(state.user?.avatar_url)
+                .apply(RequestOptions().placeholder(R.color.gray))
+                .into(userCircleImageView)
+
+        loginNameTextView.text = state.user?.login
+        fullNameTextView.text = state.user?.name
+        emailTextView.text = state.user?.email
+        followingCountView.text = state.user?.following?.toString() ?: "0"
+        followerCountView.text = state.user?.followers?.toString() ?: "0"
+        dividerTextView.setVisibility(state.user?.email?.isNotEmpty() ?: false)
+        emailImageView.setVisibility(state.user?.email?.isNotEmpty() ?: false)
+
         state.repos?.let { repos ->
             reposAdapter.repos = repos
             reposAdapter.notifyDataSetChanged()
         }
-        Glide.with(headerImageView.context)
-                .load(state.user?.avatar_url)
-                .apply(RequestOptions().placeholder(R.color.gray))
-                .into(headerImageView)
     }
 
     override fun createView(ui: AnkoContext<UserDetailActivity>) = with(ui) {
         coordinatorLayout {
             lparams(matchParent, matchParent)
-            fitsSystemWindows = true
 
-            appBarLayout {
+            themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
+                id = fabAnchorId
                 lparams(matchParent, dip(300))
-                fitsSystemWindows = true
-
                 collapsingToolbarLayout {
-                    fitsSystemWindows = true
+                    contentScrim = ColorDrawable(context.getContextColor(R.color.black))
+                    expandedTitleMarginStart = dip(20)
+                    expandedTitleMarginEnd = dip(20)
+                    setExpandedTitleTextAppearance(R.style.SessionTitleExpanded)
 
-                    toolbar {
-                        setTitleTextAppearance(context, R.style.TextAppearance_AppCompat)
-                        popupTheme = R.style.AppTheme
-                    }.lparams(matchParent, dip(56)) {
-                        collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
+                    frameLayout {
+                        layoutParams = CollapsingToolbarLayout.LayoutParams(matchParent, matchParent).apply {
+                            collapseMode = COLLAPSE_MODE_PARALLAX
+                        }
+
+                        headerImageView = imageView {
+                            scaleType = ImageView.ScaleType.CENTER_CROP
+                        }.lparams(matchParent, matchParent)
+
+                        verticalLayout {
+                            gravity = Gravity.CENTER_HORIZONTAL
+
+                            userCircleImageView = circleImageView {
+                                transitionName = "userImage"
+                            }.lparams(dip(120), dip(120)) {
+                                topMargin = dip(36)
+                            }
+                            loginNameTextView = textView {
+                                elevation = dip(2).toFloat()
+                                textSize = 24F
+                                textColor = context.getContextColor(R.color.grayWhite)
+                            }.lparams(wrapContent, wrapContent)
+
+                            linearLayout {
+                                lparams(wrapContent, wrapContent)
+                                gravity = Gravity.BOTTOM
+                                fullNameTextView = textView {
+                                    textSize = 14F
+                                    textColor = context.getContextColor(R.color.grayWhite)
+                                }.lparams(wrapContent, wrapContent)
+                                dividerTextView = textView(" / ") {
+                                    textSize = 14F
+                                    textColor = context.getContextColor(R.color.grayWhite)
+                                }.lparams(wrapContent, wrapContent)
+                                emailImageView = imageView(R.drawable.ic_email).lparams(dip(16), dip(16))
+                                emailTextView = textView {
+                                    textSize = 14F
+                                    textColor = context.getContextColor(R.color.grayWhite)
+                                }.lparams(wrapContent, wrapContent) { leftMargin = dip(4) }
+                            }
+
+                            linearLayout {
+                                lparams(wrapContent, wrapContent)
+
+                                verticalLayout {
+                                    lparams(wrapContent, wrapContent) { margin = dip(8) }
+                                    gravity = Gravity.CENTER_HORIZONTAL
+
+                                    followerCountView = textView {
+                                        textSize = 32F
+                                        textColor = context.getContextColor(R.color.white)
+                                    }.lparams(wrapContent, wrapContent)
+                                    textView(R.string.followers).lparams(wrapContent, wrapContent)
+                                }
+
+                                verticalLayout {
+                                    lparams(wrapContent, wrapContent) { margin = dip(8) }
+                                    gravity = Gravity.CENTER_HORIZONTAL
+
+                                    followingCountView = textView {
+                                        textSize = 32F
+                                        textColor = context.getContextColor(R.color.white)
+                                    }.lparams(wrapContent, wrapContent)
+                                    textView(R.string.following).lparams(wrapContent, wrapContent)
+                                }
+                            }
+                        }
                     }
 
-                    headerImageView = imageView {
-                        fitsSystemWindows = true
-                        scaleType = ImageView.ScaleType.CENTER_CROP
-                    }.lparams(matchParent, matchParent) {
-                        collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+                    toolbar = toolbar {
+                        title = ""
+                        layoutParams = CollapsingToolbarLayout.LayoutParams(
+                                matchParent,
+                                dimen(context.getResourceId(R.attr.actionBarSize))
+                        ).apply {
+                            collapseMode = COLLAPSE_MODE_PIN
+                        }
                     }
-                }.lparams(matchParent, matchParent) {
-                    scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
+                }.lparams(width = matchParent, height = matchParent) {
+                    scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
                 }
+            }
+
+            floatingActionButton = floatingActionButton().lparams {
+                anchorId = fabAnchorId
+                anchorGravity = Gravity.BOTTOM or Gravity.END
+                margin = dip(8)
             }
 
             recyclerView {

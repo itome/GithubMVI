@@ -2,6 +2,7 @@ package com.itome.githubmvi.ui.userdetail
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import com.itome.githubmvi.di.component.DaggerUserDetailActivityComponent
 import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.UserDetailActivityModule
@@ -44,6 +45,8 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
                 .build()
         component.inject(this)
 
+        setSupportActionBar(ui.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
         disposable.add(ui.repositoryClickPublisher.subscribe(this::showRepositoryActivity))
     }
 
@@ -57,6 +60,16 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     override fun onDestroy() {
         super.onDestroy()
         disposable.dispose()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                finishAfterTransition()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 
     override fun intents(): Observable<UserDetailIntent> {

@@ -13,4 +13,5 @@
     <color name="white">#FAFAFA</color>
     <color name="black">#333333</color>
     <color name="gray">#888888</color>
+    <color name="grayWhite">#CCCCCC</color>
 </resources>

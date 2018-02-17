@@ -24,7 +24,7 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     var events: List<Event> = emptyList()
 
-    val userImageClickPublisher = PublishSubject.create<String>()!!
+    val userImageClickPublisher = PublishSubject.create<Pair<String, View>>()!!
     val itemViewClickPublisher = PublishSubject.create<String>()!!
 
     override fun getItemCount(): Int = events.size
@@ -44,7 +44,9 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 lparams(matchParent, wrapContent)
                 background = parent.context.getContextDrawable(R.drawable.bg_ripple)
 
-                avatarImageView = circleImageView().lparams {
+                avatarImageView = circleImageView {
+                    transitionName = "userImage"
+                }.lparams {
                     width = dip(44)
                     height = dip(44)
                     margin = dip(12)
@@ -118,8 +120,12 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
         init {
-            avatarImageView.setOnClickListener { userImageClickPublisher.onNext(event.actor!!.login) }
-            itemView.setOnClickListener { itemViewClickPublisher.onNext(event.repo!!.name) }
+            avatarImageView.setOnClickListener {
+                userImageClickPublisher.onNext(event.actor!!.login to avatarImageView)
+            }
+            itemView.setOnClickListener {
+                itemViewClickPublisher.onNext(event.repo!!.name)
+            }
         }
 
         private fun formatDate(context: Context, dateText: String): String {

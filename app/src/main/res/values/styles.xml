@@ -14,4 +14,8 @@
         <item name="android:windowContentOverlay">@null</item>
     </style>
 
+    <style name="SessionTitleExpanded">
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
 </resources>

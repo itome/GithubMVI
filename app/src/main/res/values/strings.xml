@@ -34,4 +34,7 @@
     <string name="stars">stars</string>
     <string name="watches">watches</string>
     <string name="forks">forks</string>
+
+    <string name="followers">followers</string>
+    <string name="following">following</string>
 </resources>
