@@ -7,6 +7,7 @@ import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.UserDetailActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
+import com.itome.githubmvi.ui.repository.RepositoryActivity
 import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent
 import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.FetchUserIntent
 import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent.FetchUserReposIntent
@@ -15,6 +16,7 @@ import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.setContentView
+import org.jetbrains.anko.startActivity
 import javax.inject.Inject
 
 class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDetailViewState> {
@@ -41,6 +43,8 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
                 .apiModule(ApiModule())
                 .build()
         component.inject(this)
+
+        disposable.add(ui.repositoryClickPubilsher.subscribe(this::showRepositoryActivity))
     }
 
     override fun onStart() {
@@ -66,5 +70,9 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     private fun bind() {
         disposable.add(viewModel.states().subscribe(this::render))
         viewModel.processIntents(intents())
+    }
+
+    private fun showRepositoryActivity(repositoryName: String) {
+        startActivity<RepositoryActivity>(RepositoryActivity.REPOSITORY_NAME to repositoryName)
     }
 }

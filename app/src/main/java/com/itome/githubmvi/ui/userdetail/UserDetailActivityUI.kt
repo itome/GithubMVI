@@ -18,6 +18,8 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
 
     private val reposAdapter = UserReposAdapter()
 
+    val repositoryClickPubilsher = reposAdapter.itemViewClickPublisher
+
     fun applyState(state: UserDetailViewState) {
         state.repos?.let { repos ->
             reposAdapter.repos = repos
