@@ -109,7 +109,7 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                             loginNameTextView = textView {
                                 elevation = dip(2).toFloat()
                                 textSize = 24F
-                                textColor = context.getContextColor(R.color.grayWhite)
+                                textColor = context.getContextColor(R.color.white)
                             }.lparams(wrapContent, wrapContent)
 
                             linearLayout {
@@ -117,16 +117,16 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                                 gravity = Gravity.BOTTOM
                                 fullNameTextView = textView {
                                     textSize = 14F
-                                    textColor = context.getContextColor(R.color.grayWhite)
+                                    textColor = context.getContextColor(R.color.white)
                                 }.lparams(wrapContent, wrapContent)
                                 dividerTextView = textView(" / ") {
                                     textSize = 14F
-                                    textColor = context.getContextColor(R.color.grayWhite)
+                                    textColor = context.getContextColor(R.color.white)
                                 }.lparams(wrapContent, wrapContent)
                                 emailImageView = imageView(R.drawable.ic_email).lparams(dip(16), dip(16))
                                 emailTextView = textView {
                                     textSize = 14F
-                                    textColor = context.getContextColor(R.color.grayWhite)
+                                    textColor = context.getContextColor(R.color.white)
                                 }.lparams(wrapContent, wrapContent) { leftMargin = dip(4) }
                             }
 
@@ -141,7 +141,10 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                                         textSize = 32F
                                         textColor = context.getContextColor(R.color.white)
                                     }.lparams(wrapContent, wrapContent)
-                                    textView(R.string.followers).lparams(wrapContent, wrapContent)
+                                    textView(R.string.followers) {
+                                        textSize = 14F
+                                        textColor = context.getContextColor(R.color.white)
+                                    }.lparams(wrapContent, wrapContent)
                                 }
 
                                 verticalLayout {
@@ -152,7 +155,10 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                                         textSize = 32F
                                         textColor = context.getContextColor(R.color.white)
                                     }.lparams(wrapContent, wrapContent)
-                                    textView(R.string.following).lparams(wrapContent, wrapContent)
+                                    textView(R.string.following) {
+                                        textSize = 14F
+                                        textColor = context.getContextColor(R.color.white)
+                                    }.lparams(wrapContent, wrapContent)
                                 }
                             }
                         }
