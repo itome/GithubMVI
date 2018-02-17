@@ -5,9 +5,12 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CollapsingToolbarLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.widget.ImageView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import org.jetbrains.anko.*
+import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.collapsingToolbarLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.themedAppBarLayout
@@ -17,6 +20,7 @@ import org.jetbrains.anko.recyclerview.v7.recyclerView
 class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
 
     private val reposAdapter = UserReposAdapter()
+    private lateinit var headerImageView: ImageView
 
     val repositoryClickPublisher = reposAdapter.itemViewClickPublisher
 
@@ -25,41 +29,38 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
             reposAdapter.repos = repos
             reposAdapter.notifyDataSetChanged()
         }
+        Glide.with(headerImageView.context)
+                .load(state.user?.avatar_url)
+                .apply(RequestOptions().placeholder(R.color.gray))
+                .into(headerImageView)
     }
 
     override fun createView(ui: AnkoContext<UserDetailActivity>) = with(ui) {
         coordinatorLayout {
+            lparams(matchParent, matchParent)
             fitsSystemWindows = true
 
-            themedAppBarLayout(R.style.ThemeOverlay_AppCompat_Dark_ActionBar) {
+            appBarLayout {
                 lparams(matchParent, dip(300))
                 fitsSystemWindows = true
 
                 collapsingToolbarLayout {
                     fitsSystemWindows = true
-                    expandedTitleMarginStart = dip(48)
-                    expandedTitleMarginEnd = dip(64)
-
-                    imageView(R.drawable.ic_launcher_background) {
-                        fitsSystemWindows = true
-                        scaleType = ImageView.ScaleType.CENTER_CROP
-                    }.lparams {
-                        width = matchParent
-                        height = matchParent
-                        collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
-                    }
 
                     toolbar {
-                        setTitleTextColor(WHITE)
+                        setTitleTextAppearance(context, R.style.TextAppearance_AppCompat)
                         popupTheme = R.style.AppTheme
-                    }.lparams {
-                        width = matchParent
-                        height = R.attr.actionBarSize
+                    }.lparams(matchParent, dip(56)) {
                         collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PIN
                     }
-                }.lparams(width = matchParent) {
-                    width = matchParent
-                    height = matchParent
+
+                    headerImageView = imageView {
+                        fitsSystemWindows = true
+                        scaleType = ImageView.ScaleType.CENTER_CROP
+                    }.lparams(matchParent, matchParent) {
+                        collapseMode = CollapsingToolbarLayout.LayoutParams.COLLAPSE_MODE_PARALLAX
+                    }
+                }.lparams(matchParent, matchParent) {
                     scrollFlags = AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED
                 }
             }
