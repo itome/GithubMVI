@@ -36,7 +36,7 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         lateinit var dateTextView: TextView
 
         val itemView = parent.context.cardView {
-            cardElevation = dip(4).toFloat()
+            cardElevation = dip(2).toFloat()
             useCompatPadding = true
             lparams(matchParent, wrapContent)
 

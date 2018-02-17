@@ -8,7 +8,7 @@ import android.widget.TextView
 import com.itome.githubmvi.R
 import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.extensions.getContextColor
-import com.itome.githubmvi.extensions.setVisibility
+import com.itome.githubmvi.extensions.getContextDrawable
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
@@ -28,11 +28,13 @@ class UserReposAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         lateinit var descriptionTextView: TextView
 
         val itemView = parent.context.cardView {
-            cardElevation = dip(4).toFloat()
+            cardElevation = dip(2).toFloat()
             useCompatPadding = true
             lparams(matchParent, wrapContent)
 
             verticalLayout {
+                background = parent.context.getContextDrawable(R.drawable.bg_ripple)
+
                 linearLayout {
                     gravity = Gravity.CENTER_VERTICAL
                     lparams(matchParent, wrapContent) {
