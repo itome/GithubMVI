@@ -20,8 +20,8 @@ open class User(
 
         var email: String = "",
 
-        var repos_url: String = "",
+        var followers: Int = 0,
 
-        var events_url: String = ""
+        var following: Int = 0
 
 ) : RealmObject()
