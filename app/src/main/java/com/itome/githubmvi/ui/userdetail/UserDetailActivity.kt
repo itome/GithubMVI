@@ -44,7 +44,7 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
                 .build()
         component.inject(this)
 
-        disposable.add(ui.repositoryClickPubilsher.subscribe(this::showRepositoryActivity))
+        disposable.add(ui.repositoryClickPublisher.subscribe(this::showRepositoryActivity))
     }
 
     override fun onStart() {
