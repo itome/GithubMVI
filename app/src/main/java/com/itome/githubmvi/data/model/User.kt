@@ -24,4 +24,31 @@ open class User(
 
         var following: Int = 0
 
-) : RealmObject()
+) : RealmObject() {
+
+    fun plusFollowerCount(): User {
+        return User(
+                id = this.id,
+                login = this.login,
+                name = this.name,
+                avatar_url = this.avatar_url,
+                bio = this.bio,
+                email = this.email,
+                followers = this.followers + 1,
+                following = this.following
+        )
+    }
+
+    fun minulFollowerCount(): User {
+        return User(
+                id = this.id,
+                login = this.login,
+                name = this.name,
+                avatar_url = this.avatar_url,
+                bio = this.bio,
+                email = this.email,
+                followers = this.followers - 1,
+                following = this.following
+        )
+    }
+}

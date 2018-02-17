@@ -10,8 +10,8 @@ sealed class UserDetailAction : MviAction {
 
     data class CheckIsFollowedAction(val userName: String) : UserDetailAction()
 
-    object FollowAction : UserDetailAction()
+    data class FollowAction(val userName: String) : UserDetailAction()
 
-    object UnFollowAction : UserDetailAction()
+    data class UnFollowAction(val userName: String) : UserDetailAction()
 
 }

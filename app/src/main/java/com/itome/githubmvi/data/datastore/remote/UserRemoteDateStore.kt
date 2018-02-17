@@ -3,6 +3,7 @@ package com.itome.githubmvi.data.datastore.remote
 import com.itome.githubmvi.data.datastore.ApiService
 import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.model.User
+import io.reactivex.Completable
 import io.reactivex.Single
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -37,5 +38,13 @@ class UserRemoteDateStore @Inject constructor(
             }
         }
     }
+
+    fun followUser(
+            accessToken: String, userName: String
+    ): Completable = apiService.followUser("token " + accessToken, userName)
+
+    fun unFollowUser(
+            accessToken: String, userName: String
+    ): Completable = apiService.unFollowUser("token " + accessToken, userName)
 
 }

@@ -35,8 +35,8 @@ class UserDetailViewModel @Inject constructor(
             is FetchUserIntent -> FetchUserAction(intent.userName)
             is FetchUserReposIntent -> FetchUserReposAction(intent.userName)
             is CheckIsFollowedIntent -> CheckIsFollowedAction(intent.userName)
-            FollowIntent -> FollowAction
-            UnFollowIntent -> UnFollowAction
+            is FollowIntent -> FollowAction(intent.userName)
+            is UnFollowIntent -> UnFollowAction(intent.userName)
         }
     }
 
@@ -83,12 +83,18 @@ class UserDetailViewModel @Inject constructor(
                 }
 
                 is FollowResult -> when (result) {
-                    FollowResult.Success -> previousState.copy(isFollowed = true)
+                    FollowResult.Success -> previousState.copy(
+                            isFollowed = true,
+                            user =  previousState.user?.plusFollowerCount()
+                    )
                     is FollowResult.Failure -> previousState.copy(error = result.error)
                 }
 
                 is UnFollowResult -> when (result) {
-                    UnFollowResult.Success -> previousState.copy(isFollowed = false)
+                    UnFollowResult.Success -> previousState.copy(
+                            isFollowed = false,
+                            user = previousState.user?.minulFollowerCount()
+                    )
                     is UnFollowResult.Failure -> previousState.copy(error = result.error)
                 }
             }

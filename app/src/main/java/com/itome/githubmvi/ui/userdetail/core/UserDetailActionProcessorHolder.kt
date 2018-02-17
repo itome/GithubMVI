@@ -1,12 +1,9 @@
 package com.itome.githubmvi.ui.userdetail.core
 
+import android.util.Log
 import com.itome.githubmvi.data.repository.UserRepository
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.FetchUserAction
 import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.*
-import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.FetchUserReposAction
-import com.itome.githubmvi.ui.userdetail.core.UserDetailResult.FetchUserReposResult
-import com.itome.githubmvi.ui.userdetail.core.UserDetailResult.FetchUserResult
 import com.itome.githubmvi.ui.userdetail.core.UserDetailResult.*
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
@@ -59,18 +56,49 @@ class UserDetailActionProcessorHolder @Inject constructor(
                 }
             }
 
+    private val followUserProcessor =
+            ObservableTransformer<FollowAction, FollowResult> { actions ->
+                actions.flatMap { action ->
+                    repository.followUser(action.userName)
+                            .andThen(Observable.just(FollowResult.Success))
+                            .cast(FollowResult::class.java)
+                            .onErrorReturn(FollowResult::Failure)
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                }
+            }
+
+    private val unFollowUserProcessor =
+            ObservableTransformer<UnFollowAction, UnFollowResult> { actions ->
+                actions.flatMap { action ->
+                    repository.unFollowUser(action.userName)
+                            .doOnComplete {
+                                Log.d("Completed", "")
+                            }
+                            .andThen(Observable.just(UnFollowResult.Success))
+                            .cast(UnFollowResult::class.java)
+                            .onErrorReturn(UnFollowResult::Failure)
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                }
+            }
+
     internal var actionProcessor =
             ObservableTransformer<UserDetailAction, UserDetailResult> { actions ->
                 actions.publish { shared ->
-                    Observable.merge(
+                    Observable.merge(listOf(
                             shared.ofType(FetchUserAction::class.java).compose(fetchUserProcessor),
                             shared.ofType(FetchUserReposAction::class.java).compose(fetchUserReposProcessor),
-                            shared.ofType(CheckIsFollowedAction::class.java).compose(checkIsFollowedProcessor)
-                    ).mergeWith(
+                            shared.ofType(CheckIsFollowedAction::class.java).compose(checkIsFollowedProcessor),
+                            shared.ofType(FollowAction::class.java).compose(followUserProcessor),
+                            shared.ofType(UnFollowAction::class.java).compose(unFollowUserProcessor)
+                    )).mergeWith(
                             shared.filter({ v ->
                                 v !is FetchUserAction &&
                                         v !is FetchUserReposAction &&
-                                        v !is CheckIsFollowedAction
+                                        v !is CheckIsFollowedAction &&
+                                        v !is FollowAction &&
+                                        v !is UnFollowAction
                             }).flatMap({ w ->
                                 Observable.error<FetchUserResult>(
                                         IllegalArgumentException("Unknown Action type: $w")

@@ -52,11 +52,11 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
         setSupportActionBar(ui.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         disposable.add(ui.repositoryClickPublisher.subscribe(this::showRepositoryActivity))
-        disposable.add(ui.followClickPublisher.subscribe {
-            followIntentPublisher.onNext(FollowIntent)
+        disposable.add(ui.followClickPublisher.subscribe { userName ->
+            followIntentPublisher.onNext(FollowIntent(userName))
         })
-        disposable.add(ui.unFollowClickPublisher.subscribe {
-            unFollowIntentPublisher.onNext(UnFollowIntent)
+        disposable.add(ui.unFollowClickPublisher.subscribe { userName ->
+            unFollowIntentPublisher.onNext(UnFollowIntent(userName))
         })
     }
 
@@ -84,11 +84,13 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     }
 
     override fun intents(): Observable<UserDetailIntent> {
-        return Observable.merge(
+        return Observable.merge(listOf(
                 fetchUserIntentPublisher,
                 fetchUserReposIntentPublisher,
-                checkIsFollowedIntentPublisher
-        )
+                checkIsFollowedIntentPublisher,
+                unFollowIntentPublisher,
+                followIntentPublisher
+        ))
     }
 
     override fun render(state: UserDetailViewState) {

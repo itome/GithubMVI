@@ -97,7 +97,8 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
     }
 
     private fun showEventsActivity() {
-        val url = "https://github.com/login/oauth/authorize?client_id=${BuildConfig.CLIENT_ID}"
+        val url = "https://github.com/login/oauth/authorize" +
+                "?scope=user:follow&client_id=${BuildConfig.CLIENT_ID}"
         startActivityForResult<OAuth2Activity>(REQUEST_OAUTH, OAuth2Activity.URL to url)
     }
 }

@@ -4,6 +4,7 @@ import com.itome.githubmvi.data.datastore.local.LoginLocalDataStore
 import com.itome.githubmvi.data.datastore.remote.UserRemoteDateStore
 import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.model.User
+import io.reactivex.Completable
 import io.reactivex.Single
 import javax.inject.Inject
 
@@ -30,6 +31,20 @@ class UserRepository @Inject constructor(
         return loginLocalDataStore.readAccessToken()
                 .flatMap { accessToken ->
                     remoteDataStore.checkIsFollowed(accessToken, userName)
+                }
+    }
+
+    fun followUser(userName: String): Completable {
+        return loginLocalDataStore.readAccessToken()
+                .flatMapCompletable { accessToken ->
+                    remoteDataStore.followUser(accessToken, userName)
+                }
+    }
+
+    fun unFollowUser(userName: String): Completable {
+        return loginLocalDataStore.readAccessToken()
+                .flatMapCompletable { accessToken ->
+                    remoteDataStore.unFollowUser(accessToken, userName)
                 }
     }
 }

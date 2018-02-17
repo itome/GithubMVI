@@ -10,8 +10,8 @@ sealed class UserDetailIntent : MviIntent {
 
     data class CheckIsFollowedIntent(val userName: String) : UserDetailIntent()
 
-    object FollowIntent : UserDetailIntent()
+    data class FollowIntent(val userName: String) : UserDetailIntent()
 
-    object UnFollowIntent : UserDetailIntent()
+    data class UnFollowIntent(val userName: String) : UserDetailIntent()
 
 }
