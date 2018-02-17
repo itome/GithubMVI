@@ -1,6 +1,7 @@
 package com.itome.githubmvi.data.datastore
 
 import com.itome.githubmvi.data.model.Event
+import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.model.User
 import io.reactivex.Single
 import retrofit2.http.GET
@@ -26,4 +27,10 @@ interface ApiService {
             @Header("Authorization") accessToken: String,
             @Path("username") userName: String
     ): Single<List<Event>>
+
+    @GET("users/{username}/repos")
+    fun getUserRepos(
+            @Header("Authorization") accessToken: String,
+            @Path("username") userName: String
+    ): Single<List<Repository>>
 }
