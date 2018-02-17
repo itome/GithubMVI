@@ -4,6 +4,7 @@
     <color name="colorPrimaryDark">#000000</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="transparent">#00FFFFFF</color>
     <color name="green">#6CC644</color>
     <color name="blue">#4078C0</color>
     <color name="red">#BD2C00</color>

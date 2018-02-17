@@ -13,6 +13,7 @@ import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsIntent
 import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsPageIntent
 import com.itome.githubmvi.ui.events.core.EventsViewState
 import com.itome.githubmvi.ui.repository.RepositoryActivity
+import com.itome.githubmvi.ui.userdetail.UserDetailActivity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -73,11 +74,11 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         viewModel.processIntents(intents())
     }
 
-    private fun showUserDetailActivity(userId: Int) {
-        Log.d("ShowUserDetail", "userId: " + userId.toString())
+    private fun showUserDetailActivity(userName: String) {
+        startActivity<UserDetailActivity>(UserDetailActivity.USER_NAME to userName)
     }
 
-    private fun showRepositoryActivity(repositoryId: Int) {
-        startActivity<RepositoryActivity>(RepositoryActivity.REPOSITORY_ID to repositoryId)
+    private fun showRepositoryActivity(repositoryName: String) {
+        startActivity<RepositoryActivity>(RepositoryActivity.REPOSITORY_NAME to repositoryName)
     }
 }

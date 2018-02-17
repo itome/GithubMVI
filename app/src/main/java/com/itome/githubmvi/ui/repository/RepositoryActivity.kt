@@ -7,10 +7,10 @@ import org.jetbrains.anko.setContentView
 class RepositoryActivity : AppCompatActivity() {
 
     companion object {
-        const val REPOSITORY_ID = "repository_id"
+        const val REPOSITORY_NAME = "repository_name"
     }
 
-    private val id by lazy { intent.getIntExtra(REPOSITORY_ID, 0) }
+    private val repositoryName by lazy { intent.getStringExtra(REPOSITORY_NAME) }
     private val ui by lazy { RepositoryActivityUI() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
