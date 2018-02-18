@@ -2,6 +2,7 @@ package com.itome.githubmvi.ui.repository
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.MenuItem
 import org.jetbrains.anko.setContentView
 
 class RepositoryActivity : AppCompatActivity() {
@@ -17,5 +18,19 @@ class RepositoryActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         ui.setContentView(this)
+
+        setSupportActionBar(ui.toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        ui.applyState()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        return when (item?.itemId) {
+            android.R.id.home -> {
+                finishAfterTransition()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
     }
 }

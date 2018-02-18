@@ -31,11 +31,12 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.repository.RepositoryActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".ui.userdetail.UserDetailActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar"/>
+            android:theme="@style/NoActionBar" />
     </application>
 
 </manifest>
