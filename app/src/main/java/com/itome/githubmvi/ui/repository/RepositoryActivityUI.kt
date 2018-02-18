@@ -15,15 +15,17 @@ import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import br.tiagohm.markdownview.MarkdownView
+import br.tiagohm.markdownview.css.styles.Github
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
 import com.itome.githubmvi.extensions.decodeMarkDown
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getResourceId
-import com.itome.githubmvi.ui.repository.core.RepositoryViewState
 import com.itome.githubmvi.ui.circleImageView
 import com.itome.githubmvi.ui.markdownView
+import com.itome.githubmvi.ui.repository.core.RepositoryViewState
 import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.glide.transformations.BlurTransformation
 import org.jetbrains.anko.*
@@ -33,8 +35,6 @@ import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.design.themedAppBarLayout
 import org.jetbrains.anko.support.v4.nestedScrollView
-import ru.noties.markwon.Markwon
-import ru.noties.markwon.view.MarkwonView
 
 class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
 
@@ -50,7 +50,7 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
     private lateinit var descriptionTextView: TextView
     private lateinit var headerImageView: ImageView
     private lateinit var userCircleImageView: ImageView
-    private lateinit var markdownView: MarkwonView
+    private lateinit var markdownView: MarkdownView
     private lateinit var fab: FloatingActionButton
 
     fun applyState(state: RepositoryViewState) {
@@ -81,7 +81,7 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
         }
 
         state.readme?.let { readme ->
-            Markwon.setMarkdown(markdownView, readme.content.decodeMarkDown())
+            markdownView.loadMarkdown(readme.content.decodeMarkDown())
         }
     }
 
@@ -202,13 +202,10 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
             }
 
             nestedScrollView {
-                verticalLayout {
-                    view().lparams(matchParent, dip(32))
-                    markdownView = markdownView().lparams(matchParent, matchParent) {
-                        leftMargin = dip(16)
-                        rightMargin = dip(16)
-                    }
-                }
+                markdownView = markdownView {
+                    addStyleSheet(Github())
+                    setEscapeHtml(false)
+                }.lparams(matchParent, matchParent)
             }.lparams(matchParent, matchParent) {
                 behavior = AppBarLayout.ScrollingViewBehavior()
             }
