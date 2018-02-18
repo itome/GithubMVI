@@ -103,7 +103,7 @@ class UserReposAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
             }
 
         init {
-            itemView.setOnClickListener { itemViewClickPublisher.onNext(repository.name) }
+            itemView.setOnClickListener { itemViewClickPublisher.onNext(repository.full_name) }
         }
     }
 }

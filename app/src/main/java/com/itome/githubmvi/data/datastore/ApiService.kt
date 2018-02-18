@@ -1,6 +1,7 @@
 package com.itome.githubmvi.data.datastore
 
 import com.itome.githubmvi.data.model.Event
+import com.itome.githubmvi.data.model.Readme
 import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.model.User
 import io.reactivex.Completable
@@ -44,5 +45,34 @@ interface ApiService {
     fun unFollowUser(
             @Header("Authorization") accessToken: String,
             @Path("username") userName: String
+    ): Completable
+
+    @GET("repos/{owner}/{repo}")
+    fun getRepository(
+            @Header("Authorization") accessToken: String,
+            @Path("owner") ownerName: String,
+            @Path("repo") repoName: String
+    ): Single<Repository>
+
+    @GET("repos/{owner}/{repo}/readme")
+    fun getReadme(
+            @Header("Authorization") accessToken: String,
+            @Path("owner") ownerName: String,
+            @Path("repo") repoName: String
+    ): Single<Readme>
+
+    @PUT("user/starred/{owner}/{repo}")
+    @Headers("Content-Length: 0")
+    fun starRepository(
+            @Header("Authorization") accessToken: String,
+            @Path("owner") ownerName: String,
+            @Path("repo") repoName: String
+    ): Completable
+
+    @DELETE("user/starred/{owner}/{repo}")
+    fun unStarRepository(
+            @Header("Authorization") accessToken: String,
+            @Path("owner") ownerName: String,
+            @Path("repo") repoName: String
     ): Completable
 }

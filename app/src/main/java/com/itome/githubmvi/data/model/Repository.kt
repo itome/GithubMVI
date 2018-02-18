@@ -1,8 +1,10 @@
 package com.itome.githubmvi.data.model
 
-open class Repository(
+data class Repository(
 
         var id: Int = 0,
+
+        var owner: Owner? = null,
 
         var name: String = "",
 
@@ -14,7 +16,7 @@ open class Repository(
 
         var stargazers_count: Int = 0,
 
-        var watchers_count: Int = 0
+        var subscribers_count: Int = 0
 
 ) {
 
@@ -27,4 +29,11 @@ open class Repository(
             var avatar_url: String = ""
     )
 
+    fun plusStarCount(): Repository {
+        return copy(stargazers_count = this.stargazers_count + 1)
+    }
+
+    fun minusStarCount(): Repository {
+        return copy(stargazers_count = this.stargazers_count - 1)
+    }
 }

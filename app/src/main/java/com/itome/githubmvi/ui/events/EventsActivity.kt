@@ -82,7 +82,9 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         startActivity(intent, compat.toBundle())
     }
 
-    private fun showRepositoryActivity(repositoryName: String) {
-        startActivity<RepositoryActivity>(RepositoryActivity.REPOSITORY_NAME to repositoryName)
+    private fun showRepositoryActivity(fullName: String) {
+        startActivity<RepositoryActivity>(
+                RepositoryActivity.REPOSITORY_NAME to fullName
+        )
     }
 }

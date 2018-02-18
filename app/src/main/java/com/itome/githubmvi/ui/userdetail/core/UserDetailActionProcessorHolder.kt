@@ -72,9 +72,6 @@ class UserDetailActionProcessorHolder @Inject constructor(
             ObservableTransformer<UnFollowAction, UnFollowResult> { actions ->
                 actions.flatMap { action ->
                     repository.unFollowUser(action.userName)
-                            .doOnComplete {
-                                Log.d("Completed", "")
-                            }
                             .andThen(Observable.just(UnFollowResult.Success))
                             .cast(UnFollowResult::class.java)
                             .onErrorReturn(UnFollowResult::Failure)
