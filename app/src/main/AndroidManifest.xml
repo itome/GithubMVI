@@ -28,7 +28,8 @@
             android:theme="@style/NoActionBar" />
         <activity
             android:name=".ui.events.EventsActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" />
         <activity
             android:name=".ui.repository.RepositoryActivity"
             android:screenOrientation="portrait"

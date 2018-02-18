@@ -32,6 +32,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
 
     private val fetchFirstPageIntentPublisher = PublishSubject.create<FetchFirstPageIntent>()
     private val fetchPageIntentPublisher = PublishSubject.create<FetchPageIntent>()
+    private val fetchLoginUserIntentPublisher = PublishSubject.create<FetchLoginUserIntent>()
     private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,6 +56,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         super.onStart()
         bind()
         fetchFirstPageIntentPublisher.onNext(FetchFirstPageIntent)
+        fetchLoginUserIntentPublisher.onNext(FetchLoginUserIntent)
     }
 
     override fun onDestroy() {
@@ -65,7 +67,8 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     override fun intents(): Observable<EventsIntent> {
         return Observable.merge(
                 fetchFirstPageIntentPublisher,
-                fetchPageIntentPublisher
+                fetchPageIntentPublisher,
+                fetchLoginUserIntentPublisher
         )
     }
 

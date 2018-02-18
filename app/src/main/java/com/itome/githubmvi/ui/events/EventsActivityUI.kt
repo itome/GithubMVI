@@ -3,12 +3,20 @@ package com.itome.githubmvi.ui.events
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.view.Gravity
 import android.view.View
+import android.widget.ImageView
+import android.widget.TextView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.itome.githubmvi.R
+import com.itome.githubmvi.extensions.getContextColor
+import com.itome.githubmvi.ui.circleImageView
 import com.itome.githubmvi.ui.events.core.EventsViewState
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.AnkoComponent
-import org.jetbrains.anko.AnkoContext
-import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.toolbar
+import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
 
@@ -23,15 +31,37 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
     val loadMorePublisher = PublishSubject.create<View>()!!
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
+    private lateinit var userCircleImageView: ImageView
+    private lateinit var userNameTextView: TextView
 
     fun applyState(state: EventsViewState) {
         eventsAdapter.events = state.events
         eventsAdapter.notifyDataSetChanged()
         swipeRefreshLayout.isRefreshing = state.isLoading
+
+        Glide.with(userCircleImageView)
+                .load(state.loginUser?.avatar_url)
+                .apply(RequestOptions().placeholder(R.color.gray))
+                .into(userCircleImageView)
+        userNameTextView.text = state.loginUser?.login
     }
 
     override fun createView(ui: AnkoContext<EventsActivity>) = with(ui) {
-        frameLayout {
+        verticalLayout {
+            appBarLayout {
+                toolbar {
+                    linearLayout {
+                        userCircleImageView = circleImageView().lparams(dip(32), dip(32))
+                        userNameTextView = textView {
+                            textColor = context.getContextColor(R.color.white)
+                            textSize = 24F
+                        }.lparams(wrapContent, wrapContent) {
+                            leftMargin = dip(16)
+                        }
+                    }
+                }
+            }
+
             swipeRefreshLayout = swipeRefreshLayout {
                 setOnRefreshListener { refreshPublisher.onNext(this) }
                 recyclerView {
