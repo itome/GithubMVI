@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.oauth2.OAuth2Activity"
+            android:name=".ui.OAuth2Activity"
             android:screenOrientation="portrait"
             android:theme="@style/NoActionBar" />
         <activity

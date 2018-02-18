@@ -22,7 +22,7 @@ import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getResourceId
 import com.itome.githubmvi.extensions.setVisibility
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
-import com.itome.githubmvi.ui.widget.circleImageView
+import com.itome.githubmvi.ui.circleImageView
 import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.glide.transformations.BlurTransformation
 import org.jetbrains.anko.*

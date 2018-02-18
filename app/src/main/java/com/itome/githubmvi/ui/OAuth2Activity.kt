@@ -1,4 +1,4 @@
-package com.itome.githubmvi.ui.oauth2
+package com.itome.githubmvi.ui
 
 import android.annotation.SuppressLint
 import android.app.Activity

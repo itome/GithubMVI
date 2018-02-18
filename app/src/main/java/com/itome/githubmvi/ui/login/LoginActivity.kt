@@ -15,7 +15,7 @@ import com.itome.githubmvi.ui.login.core.LoginIntent
 import com.itome.githubmvi.ui.login.core.LoginIntent.FetchAccessTokenIntent
 import com.itome.githubmvi.ui.login.core.LoginIntent.FetchLoginDataIntent
 import com.itome.githubmvi.ui.login.core.LoginViewState
-import com.itome.githubmvi.ui.oauth2.OAuth2Activity
+import com.itome.githubmvi.ui.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject

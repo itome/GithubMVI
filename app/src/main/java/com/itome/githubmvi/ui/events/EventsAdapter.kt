@@ -13,7 +13,7 @@ import com.itome.githubmvi.R
 import com.itome.githubmvi.data.model.Event
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getContextDrawable
-import com.itome.githubmvi.ui.widget.circleImageView
+import com.itome.githubmvi.ui.circleImageView
 import io.reactivex.subjects.PublishSubject
 import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView

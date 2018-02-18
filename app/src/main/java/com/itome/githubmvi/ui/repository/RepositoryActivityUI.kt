@@ -22,8 +22,8 @@ import com.itome.githubmvi.extensions.decodeMarkDown
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getResourceId
 import com.itome.githubmvi.ui.repository.core.RepositoryViewState
-import com.itome.githubmvi.ui.widget.circleImageView
-import com.itome.githubmvi.ui.widget.markdownView
+import com.itome.githubmvi.ui.circleImageView
+import com.itome.githubmvi.ui.markdownView
 import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.glide.transformations.BlurTransformation
 import org.jetbrains.anko.*

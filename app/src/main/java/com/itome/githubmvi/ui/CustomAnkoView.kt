@@ -1,6 +1,6 @@
 @file:Suppress("NOTHING_TO_INLINE")
 
-package com.itome.githubmvi.ui.widget
+package com.itome.githubmvi.ui
 
 import android.view.ViewManager
 import de.hdodenhof.circleimageview.CircleImageView
