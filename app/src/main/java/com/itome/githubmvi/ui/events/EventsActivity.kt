@@ -10,8 +10,7 @@ import com.itome.githubmvi.di.module.EventsActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
 import com.itome.githubmvi.ui.events.core.EventsIntent
-import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsIntent
-import com.itome.githubmvi.ui.events.core.EventsIntent.FetchEventsPageIntent
+import com.itome.githubmvi.ui.events.core.EventsIntent.*
 import com.itome.githubmvi.ui.events.core.EventsViewState
 import com.itome.githubmvi.ui.repository.RepositoryActivity
 import com.itome.githubmvi.ui.userdetail.UserDetailActivity
@@ -29,9 +28,10 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     lateinit var viewModel: MviViewModel<EventsIntent, EventsViewState>
 
     private val ui by lazy { EventsActivityUI() }
+    private var nextPageNum: Int = 0
 
-    private val fetchEventsIntentPublisher = PublishSubject.create<FetchEventsIntent>()
-    private val fetchEventsPageIntentPublisher = PublishSubject.create<FetchEventsPageIntent>()
+    private val fetchFirstPageIntentPublisher = PublishSubject.create<FetchFirstPageIntent>()
+    private val fetchPageIntentPublisher = PublishSubject.create<FetchPageIntent>()
     private val disposable = CompositeDisposable()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,12 +48,13 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         disposable.add(ui.userImageClickPublisher.subscribe(this::showUserDetailActivity))
         disposable.add(ui.itemViewClickPublisher.subscribe(this::showRepositoryActivity))
         disposable.add(ui.refreshPublisher.subscribe { refresh() })
+        disposable.add(ui.loadMorePublisher.subscribe { loadNextPage() })
     }
 
     override fun onStart() {
         super.onStart()
         bind()
-        fetchEventsIntentPublisher.onNext(FetchEventsIntent)
+        fetchFirstPageIntentPublisher.onNext(FetchFirstPageIntent)
     }
 
     override fun onDestroy() {
@@ -63,12 +64,13 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
 
     override fun intents(): Observable<EventsIntent> {
         return Observable.merge(
-                fetchEventsIntentPublisher,
-                fetchEventsPageIntentPublisher
+                fetchFirstPageIntentPublisher,
+                fetchPageIntentPublisher
         )
     }
 
     override fun render(state: EventsViewState) {
+        nextPageNum = state.nextPage
         ui.applyState(state)
     }
 
@@ -90,6 +92,10 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     }
 
     private fun refresh() {
-        fetchEventsIntentPublisher.onNext(FetchEventsIntent)
+        fetchFirstPageIntentPublisher.onNext(FetchFirstPageIntent)
+    }
+
+    private fun loadNextPage() {
+        fetchPageIntentPublisher.onNext(FetchPageIntent(nextPageNum))
     }
 }

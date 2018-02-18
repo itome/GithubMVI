@@ -1,9 +1,9 @@
 package com.itome.githubmvi.ui.events.core
 
 import com.itome.githubmvi.mvibase.MviViewModel
-import com.itome.githubmvi.ui.events.core.EventsResult.*
-import com.itome.githubmvi.ui.events.core.EventsIntent.*
 import com.itome.githubmvi.ui.events.core.EventsAction.*
+import com.itome.githubmvi.ui.events.core.EventsIntent.*
+import com.itome.githubmvi.ui.events.core.EventsResult.*
 import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
@@ -32,38 +32,54 @@ class EventsViewModel @Inject constructor(
 
     private fun actionFromIntent(intent: EventsIntent): EventsAction {
         return when (intent) {
-            FetchEventsIntent -> FetchEventsAction
-            is FetchEventsPageIntent -> FetchEventsPageAction(intent.pageNum)
+            FetchFirstPageIntent -> FetchFirstPageAction
+            is FetchPageIntent -> FetchEventsPageAction(intent.pageNum)
+            FetchLoginUserIntent -> FetchLoginUserAction
         }
     }
 
     companion object {
         private val reducer = { previousState: EventsViewState, result: EventsResult ->
             when (result) {
-                is FetchEventsResult -> when (result) {
-                    is FetchEventsResult.Success ->
+                is FetchFirstPageResult -> when (result) {
+                    is FetchFirstPageResult.Success ->
                         previousState.copy(
                                 events = result.events,
                                 error = null,
-                                isLoading = false
+                                isLoading = false,
+                                nextPage = 2
                         )
-                    is FetchEventsResult.Failure ->
-                        previousState.copy(error = result.error)
-                    FetchEventsResult.InFlight ->
+                    is FetchFirstPageResult.Failure ->
+                        previousState.copy(error = result.error, isLoading = false)
+                    FetchFirstPageResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }
 
                 is FetchEventsPageResult -> when (result) {
                     is FetchEventsPageResult.Success ->
                         previousState.copy(
-                                events = result.events,
+                                events = previousState.events + result.events,
+                                error = null,
+                                isLoading = false,
+                                nextPage = previousState.nextPage + 1
+                        )
+                    is FetchEventsPageResult.Failure ->
+                        previousState.copy(error = result.error, isLoading = false)
+
+                    FetchEventsPageResult.InFlight ->
+                        previousState.copy(isLoading = true)
+                }
+
+                is FetchLoginUserResult -> when (result) {
+                    is FetchLoginUserResult.Success ->
+                        previousState.copy(
+                                loginUser = result.user,
                                 error = null,
                                 isLoading = false
                         )
-                    is FetchEventsPageResult.Failure ->
-                        previousState.copy(error = result.error)
-
-                    FetchEventsPageResult.InFlight ->
+                    is FetchLoginUserResult.Failure ->
+                        previousState.copy(error = result.error, isLoading = false)
+                    FetchLoginUserResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }
             }

@@ -25,7 +25,8 @@ interface ApiService {
     @GET("users/{username}/received_events")
     fun getEvents(
             @Header("Authorization") accessToken: String,
-            @Path("username") userName: String
+            @Path("username") userName: String,
+            @Query("page") pageNum: Int
     ): Single<List<Event>>
 
     @GET("users/{username}/repos")

@@ -4,9 +4,9 @@ import com.itome.githubmvi.mvibase.MviIntent
 
 sealed class EventsIntent : MviIntent {
 
-    object FetchEventsIntent : EventsIntent()
+    object FetchFirstPageIntent : EventsIntent()
 
-    data class FetchEventsPageIntent(
-            val pageNum: Int
-    ) : EventsIntent()
+    data class FetchPageIntent(val pageNum: Int) : EventsIntent()
+
+    object FetchLoginUserIntent: EventsIntent()
 }

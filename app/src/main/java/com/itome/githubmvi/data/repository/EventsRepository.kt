@@ -11,10 +11,12 @@ class EventsRepository @Inject constructor(
         private val remoteDataStore: EventsRemoteDataStore
 ) {
 
-    fun getEvents(): Single<List<Event>> {
+    fun getEvents(pageNum: Int): Single<List<Event>> {
         return loginLocalDataStore.readLoginData()
                 .flatMap { loginData ->
-                    remoteDataStore.fetchEvents(loginData.accessToken, loginData.loginUser!!.name)
+                    remoteDataStore.fetchEvents(
+                            loginData.accessToken, loginData.loginUser!!.name, pageNum
+                    )
                 }
     }
 }

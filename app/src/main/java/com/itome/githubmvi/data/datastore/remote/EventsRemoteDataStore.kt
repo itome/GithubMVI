@@ -9,6 +9,6 @@ class EventsRemoteDataStore @Inject constructor(
         private val apiService: ApiService
 ) {
     fun fetchEvents(
-            accessToken: String, userName: String
-    ): Single<List<Event>> = apiService.getEvents("token " + accessToken, userName)
+            accessToken: String, userName: String, pageNum: Int
+    ): Single<List<Event>> = apiService.getEvents("token " + accessToken, userName, pageNum)
 }
