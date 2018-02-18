@@ -47,6 +47,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         ui.setContentView(this)
 
         disposable.add(ui.userImageClickPublisher.subscribe(this::showUserDetailActivity))
+        disposable.add(ui.loginUserImageClickPublisher.subscribe(this::showUserDetailActivity))
         disposable.add(ui.itemViewClickPublisher.subscribe(this::showRepositoryActivity))
         disposable.add(ui.refreshPublisher.subscribe { refresh() })
         disposable.add(ui.loadMorePublisher.subscribe { loadNextPage() })

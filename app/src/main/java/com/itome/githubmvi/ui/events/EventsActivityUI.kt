@@ -3,13 +3,13 @@ package com.itome.githubmvi.ui.events
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
+import com.itome.githubmvi.data.model.User
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.ui.circleImageView
 import com.itome.githubmvi.ui.events.core.EventsViewState
@@ -29,6 +29,7 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
     val itemViewClickPublisher = eventsAdapter.itemViewClickPublisher
     val refreshPublisher = PublishSubject.create<View>()!!
     val loadMorePublisher = PublishSubject.create<View>()!!
+    val loginUserImageClickPublisher = PublishSubject.create<Pair<String, View>>()!!
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var userCircleImageView: ImageView
@@ -44,6 +45,11 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
                 .apply(RequestOptions().placeholder(R.color.gray))
                 .into(userCircleImageView)
         userNameTextView.text = state.loginUser?.login
+        userCircleImageView.setOnClickListener {
+            state.loginUser?.let {
+                loginUserImageClickPublisher.onNext(state.loginUser.login to userCircleImageView)
+            }
+        }
     }
 
     override fun createView(ui: AnkoContext<EventsActivity>) = with(ui) {
@@ -51,7 +57,9 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
             appBarLayout {
                 toolbar {
                     linearLayout {
-                        userCircleImageView = circleImageView().lparams(dip(32), dip(32))
+                        userCircleImageView = circleImageView {
+                            transitionName = "userImage"
+                        }.lparams(dip(32), dip(32))
                         userNameTextView = textView {
                             textColor = context.getContextColor(R.color.white)
                             textSize = 24F
