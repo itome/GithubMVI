@@ -69,4 +69,8 @@ dependencies {
     implementation 'com.google.dagger:dagger:2.14.1'
     kapt 'com.google.dagger:dagger-compiler:2.14.1'
     provided 'org.glassfish:javax.annotation:10.0-b28'
+
+    implementation 'ru.noties:markwon:1.0.3'
+    implementation 'ru.noties:markwon-image-loader:1.0.3'
+    implementation 'ru.noties:markwon-view:1.0.3'
 }
