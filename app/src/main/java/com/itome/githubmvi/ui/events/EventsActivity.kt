@@ -47,6 +47,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
 
         disposable.add(ui.userImageClickPublisher.subscribe(this::showUserDetailActivity))
         disposable.add(ui.itemViewClickPublisher.subscribe(this::showRepositoryActivity))
+        disposable.add(ui.refreshPublisher.subscribe { refresh() })
     }
 
     override fun onStart() {
@@ -86,5 +87,9 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         startActivity<RepositoryActivity>(
                 RepositoryActivity.REPOSITORY_NAME to fullName
         )
+    }
+
+    private fun refresh() {
+        fetchEventsIntentPublisher.onNext(FetchEventsIntent)
     }
 }
