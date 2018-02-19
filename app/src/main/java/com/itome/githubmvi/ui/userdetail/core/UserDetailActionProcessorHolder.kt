@@ -1,6 +1,5 @@
 package com.itome.githubmvi.ui.userdetail.core
 
-import android.util.Log
 import com.itome.githubmvi.data.repository.UserRepository
 import com.itome.githubmvi.scheduler.SchedulerProvider
 import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.*
