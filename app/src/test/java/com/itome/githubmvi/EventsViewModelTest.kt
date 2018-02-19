@@ -20,7 +20,6 @@ import org.mockito.Mock
 import org.mockito.Mockito.anyInt
 import org.mockito.Mockito.verify
 import org.mockito.MockitoAnnotations
-import kotlin.math.exp
 
 class EventsViewModelTest {
 
