@@ -97,7 +97,7 @@ class LoginViewModel @Inject constructor(
                                 isLoading = false
                         )
                     FetchLoginDataResult.NeedsAccessToken ->
-                        previousState.copy(needsAccessToken = true)
+                        previousState.copy(needsAccessToken = true, isLoading = false)
                     FetchLoginDataResult.StartNextActivity ->
                         previousState.copy(startNextActivity = true)
                     FetchLoginDataResult.InFlight ->
