@@ -43,7 +43,7 @@ ankoLayoutライブラリを使ってkotlinでビューを作成しています�
 
 
 
-### 使用したライブラリ
+## 使用したライブラリ
 - [realm](https://github.com/realm/realm-java) ログインデータなどを保存するデータベース用に使っています。
 - [rxjava](https://github.com/ReactiveX/RxJava) アプリの中核を担うライブラリで、ViewModel層の入力から出力まで全てをrxのストリームとして扱っています。
 - [anko](https://github.com/Kotlin/anko) Androidのレイアウトをkotlinで書くためのライブラリ
