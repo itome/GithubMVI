@@ -25,7 +25,7 @@ class RepositoryViewModel @Inject constructor(
         return intentsSubject
                 .map(this::actionFromIntent)
                 .compose(actionProcessorHolder.actionProcessor)
-                .scan(RepositoryViewState.idel(), reducer)
+                .scan(RepositoryViewState.idle(), reducer)
                 .replay(1)
                 .autoConnect(0)
     }

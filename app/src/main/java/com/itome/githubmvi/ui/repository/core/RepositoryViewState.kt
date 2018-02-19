@@ -12,7 +12,7 @@ data class RepositoryViewState(
         val isLoading: Boolean
 ): MviViewState {
     companion object {
-        fun idel(): RepositoryViewState {
+        fun idle(): RepositoryViewState {
             return RepositoryViewState(
                     repository = null,
                     readme = null,
