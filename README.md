@@ -10,6 +10,10 @@ CLIENT_SECRET=xxxxxxxxxxxxxxxxxxxxxxxxxx
 ...
 ```
 
+## テスト
+`src/test` 下にViewModelのテストがあります。Android Studio上で実行してください。
+
+
 ## 仕様について
 画面数は4で、それぞれ
 - ログイン画面(ログイン以降はスプラッシュ画面として機能)
