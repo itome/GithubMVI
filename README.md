@@ -3,7 +3,7 @@
 
 ## 実行方法
 Githubでアプリを登録し、clientIdとclientSecretを取得してください。その際にAuthorization callback URLに`github-mvi://oauth`を指定してください。
-プロジェクトルートの`local.proverties`に下記のようにGithubのclientIdとclientSecretを入力してください。
+取得したclientIdとclientSecretは、プロジェクトルートの`local.properties`に下記のように入力してください。
 ```
 ...
 CLIENT_ID=xxxxxxxxxxxxxxxxxxxxxxxxxx
