@@ -15,7 +15,7 @@ class EventsRepository @Inject constructor(
         return loginLocalDataStore.readLoginData()
                 .flatMap { loginData ->
                     remoteDataStore.fetchEvents(
-                            loginData.accessToken, loginData.loginUser!!.name, pageNum
+                            loginData.accessToken, loginData.loginUser!!.login, pageNum
                     )
                 }
     }
