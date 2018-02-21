@@ -28,7 +28,6 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     lateinit var viewModel: MviViewModel<EventsIntent, EventsViewState>
 
     private val ui by lazy { EventsActivityUI() }
-    private var nextPageNum: Int = 0
 
     private val fetchFirstPageIntentPublisher = PublishSubject.create<FetchFirstPageIntent>()
     private val fetchPageIntentPublisher = PublishSubject.create<FetchPageIntent>()
@@ -50,7 +49,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         disposable.add(ui.loginUserImageClickPublisher.subscribe(this::showUserDetailActivity))
         disposable.add(ui.itemViewClickPublisher.subscribe(this::showRepositoryActivity))
         disposable.add(ui.refreshPublisher.subscribe { refresh() })
-        disposable.add(ui.loadMorePublisher.subscribe { loadNextPage() })
+        disposable.add(ui.loadMorePublisher.subscribe(this::loadNextPage))
     }
 
     override fun onStart() {
@@ -74,7 +73,6 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     }
 
     override fun render(state: EventsViewState) {
-        nextPageNum = state.nextPage
         ui.applyState(state)
     }
 
@@ -99,7 +97,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         fetchFirstPageIntentPublisher.onNext(FetchFirstPageIntent)
     }
 
-    private fun loadNextPage() {
-        fetchPageIntentPublisher.onNext(FetchPageIntent(nextPageNum))
+    private fun loadNextPage(page: Int) {
+        fetchPageIntentPublisher.onNext(FetchPageIntent(page))
     }
 }

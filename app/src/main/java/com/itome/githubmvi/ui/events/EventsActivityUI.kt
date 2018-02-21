@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
-import com.itome.githubmvi.data.model.User
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.ui.circleImageView
 import com.itome.githubmvi.ui.events.core.EventsViewState
@@ -28,14 +27,18 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
     val userImageClickPublisher = eventsAdapter.userImageClickPublisher
     val itemViewClickPublisher = eventsAdapter.itemViewClickPublisher
     val refreshPublisher = PublishSubject.create<View>()!!
-    val loadMorePublisher = PublishSubject.create<View>()!!
+    val loadMorePublisher = PublishSubject.create<Int>()!!
     val loginUserImageClickPublisher = PublishSubject.create<Pair<String, View>>()!!
 
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var userCircleImageView: ImageView
     private lateinit var userNameTextView: TextView
+    private lateinit var endlessOnScrollListener: EndlessOnScrollListener
 
     fun applyState(state: EventsViewState) {
+        if (!state.isLoading && state.nextPage == 2) {
+            endlessOnScrollListener.resetListener()
+        }
         eventsAdapter.events = state.events
         eventsAdapter.notifyDataSetChanged()
         swipeRefreshLayout.isRefreshing = state.isLoading
@@ -75,14 +78,15 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
                 recyclerView {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     adapter = eventsAdapter
-
-                    addOnScrollListener(object : EndlessOnScrollListener(
+                    endlessOnScrollListener = object : EndlessOnScrollListener(
                             layoutManager as LinearLayoutManager
                     ) {
-                        override fun onLoadMore() {
-                            loadMorePublisher.onNext(view)
+                        override fun onLoadMore(page: Int) {
+                            loadMorePublisher.onNext(page)
                         }
-                    })
+                    }
+
+                    addOnScrollListener(endlessOnScrollListener)
                 }
             }
         }
@@ -95,6 +99,7 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
         private val visibleThreshold = 5
         private var previousTotal = 0
         private var loading = true
+        private var currentPage = 1
 
         override fun onScrolled(recyclerView: RecyclerView?, dx: Int, dy: Int) {
             super.onScrolled(recyclerView, dx, dy)
@@ -110,11 +115,17 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
                 }
             }
             if (!loading && totalItemCount - visibleItemCount <= firstVisibleItem + visibleThreshold) {
-                onLoadMore()
+                currentPage++
+                onLoadMore(currentPage)
                 loading = true
             }
         }
 
-        abstract fun onLoadMore()
+        fun resetListener() {
+            previousTotal = 0
+            currentPage = 1
+        }
+
+        abstract fun onLoadMore(page: Int)
     }
 }
