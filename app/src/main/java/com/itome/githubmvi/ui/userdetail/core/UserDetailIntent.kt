@@ -8,6 +8,8 @@ sealed class UserDetailIntent : MviIntent {
 
     data class FetchUserReposIntent(val userName: String) : UserDetailIntent()
 
+    data class CheckIsLoginUserIntent(val userName: String) : UserDetailIntent()
+
     data class CheckIsFollowedIntent(val userName: String) : UserDetailIntent()
 
     data class FollowIntent(val userName: String) : UserDetailIntent()

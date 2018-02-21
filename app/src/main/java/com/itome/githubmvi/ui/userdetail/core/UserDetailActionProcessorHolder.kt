@@ -1,5 +1,6 @@
 package com.itome.githubmvi.ui.userdetail.core
 
+import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.data.repository.UserRepository
 import com.itome.githubmvi.scheduler.SchedulerProvider
 import com.itome.githubmvi.ui.userdetail.core.UserDetailAction.*
@@ -9,6 +10,7 @@ import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
 class UserDetailActionProcessorHolder @Inject constructor(
+        private val loginRepository: LoginRepository,
         private val repository: UserRepository,
         private val schedulerProvider: SchedulerProvider
 ) {
@@ -34,10 +36,24 @@ class UserDetailActionProcessorHolder @Inject constructor(
                             .toObservable()
                             .map { repos -> FetchUserReposResult.Success(repos) }
                             .cast(FetchUserReposResult::class.java)
-                            .onErrorReturn(FetchUserReposResult::Feilure)
+                            .onErrorReturn(FetchUserReposResult::Failure)
                             .subscribeOn(schedulerProvider.io())
                             .observeOn(schedulerProvider.ui())
                             .startWith(FetchUserReposResult.InFlight)
+                }
+            }
+
+    private val checkIsLoginUserProcessor =
+            ObservableTransformer<CheckIsLoginUserAction, CheckIsLoginUserResult> { actions ->
+                actions.flatMap { action ->
+                    loginRepository.getLoginUser()
+                            .toObservable()
+                            .map { user -> CheckIsLoginUserResult.Success(user.login == action.userName) }
+                            .cast(CheckIsLoginUserResult::class.java)
+                            .onErrorReturn(CheckIsLoginUserResult::Failure)
+                            .subscribeOn(schedulerProvider.io())
+                            .observeOn(schedulerProvider.ui())
+                            .startWith(CheckIsLoginUserResult.InFlight)
                 }
             }
 
@@ -85,6 +101,7 @@ class UserDetailActionProcessorHolder @Inject constructor(
                     Observable.merge(listOf(
                             shared.ofType(FetchUserAction::class.java).compose(fetchUserProcessor),
                             shared.ofType(FetchUserReposAction::class.java).compose(fetchUserReposProcessor),
+                            shared.ofType(CheckIsLoginUserAction::class.java).compose(checkIsLoginUserProcessor),
                             shared.ofType(CheckIsFollowedAction::class.java).compose(checkIsFollowedProcessor),
                             shared.ofType(FollowAction::class.java).compose(followUserProcessor),
                             shared.ofType(UnFollowAction::class.java).compose(unFollowUserProcessor)
@@ -92,6 +109,7 @@ class UserDetailActionProcessorHolder @Inject constructor(
                             shared.filter({ v ->
                                 v !is FetchUserAction &&
                                         v !is FetchUserReposAction &&
+                                        v !is CheckIsLoginUserAction &&
                                         v !is CheckIsFollowedAction &&
                                         v !is FollowAction &&
                                         v !is UnFollowAction

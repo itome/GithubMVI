@@ -34,6 +34,7 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     private val fetchUserIntentPublisher = PublishSubject.create<FetchUserIntent>()
     private val fetchUserReposIntentPublisher = PublishSubject.create<FetchUserReposIntent>()
     private val checkIsFollowedIntentPublisher = PublishSubject.create<CheckIsFollowedIntent>()
+    private val checkIsLoginUserIntentPublisher = PublishSubject.create<CheckIsLoginUserIntent>()
     private val followIntentPublisher = PublishSubject.create<FollowIntent>()
     private val unFollowIntentPublisher = PublishSubject.create<UnFollowIntent>()
     private val disposable = CompositeDisposable()
@@ -66,6 +67,7 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
         fetchUserIntentPublisher.onNext(FetchUserIntent(userName))
         fetchUserReposIntentPublisher.onNext(FetchUserReposIntent(userName))
         checkIsFollowedIntentPublisher.onNext(CheckIsFollowedIntent(userName))
+        checkIsLoginUserIntentPublisher.onNext(CheckIsLoginUserIntent(userName))
     }
 
     override fun onDestroy() {
@@ -87,6 +89,7 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
         return Observable.merge(listOf(
                 fetchUserIntentPublisher,
                 fetchUserReposIntentPublisher,
+                checkIsLoginUserIntentPublisher,
                 checkIsFollowedIntentPublisher,
                 unFollowIntentPublisher,
                 followIntentPublisher

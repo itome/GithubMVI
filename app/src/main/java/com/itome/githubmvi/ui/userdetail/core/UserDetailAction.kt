@@ -8,6 +8,8 @@ sealed class UserDetailAction : MviAction {
 
     data class FetchUserReposAction(val userName: String) : UserDetailAction()
 
+    data class CheckIsLoginUserAction(val userName: String) : UserDetailAction()
+
     data class CheckIsFollowedAction(val userName: String) : UserDetailAction()
 
     data class FollowAction(val userName: String) : UserDetailAction()

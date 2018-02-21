@@ -2,6 +2,7 @@ package com.itome.githubmvi
 
 import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.model.User
+import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.data.repository.UserRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
@@ -31,6 +32,8 @@ class UserDetailViewModelTest {
     }
 
     @Mock
+    private lateinit var loginRepository: LoginRepository
+    @Mock
     private lateinit var userRepository: UserRepository
     private lateinit var schedulerProvider: SchedulerProvider
     private lateinit var viewModel: UserDetailViewModel
@@ -42,7 +45,7 @@ class UserDetailViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = UserDetailViewModel(UserDetailActionProcessorHolder(userRepository, schedulerProvider))
+        viewModel = UserDetailViewModel(UserDetailActionProcessorHolder(loginRepository, userRepository, schedulerProvider))
 
         testObserver = viewModel.states().test()
     }
@@ -103,6 +106,38 @@ class UserDetailViewModelTest {
         viewModel.processIntents(Observable.just(UserDetailIntent.FetchUserReposIntent(expectedUser.name)))
 
         verify(userRepository).getUserRepos(expectedUser.name)
+        testObserver.assertValueAt(1) {
+            it == defaultState.copy(isLoading = true)
+        }
+        testObserver.assertValueAt(2) {
+            it == defaultState.copy(error = expectedError)
+        }
+    }
+
+    @Test
+    fun checkIsLoginUserIntent_Success() {
+        val defaultState = UserDetailViewState.idle()
+        whenever(loginRepository.getLoginUser()).thenReturn(Single.just(expectedUser))
+
+        viewModel.processIntents(Observable.just(UserDetailIntent.CheckIsLoginUserIntent(expectedUser.login)))
+
+        verify(loginRepository).getLoginUser()
+        testObserver.assertValueAt(1) {
+            it == defaultState.copy(isLoading = true)
+        }
+        testObserver.assertValueAt(2) {
+            it == defaultState.copy(isLoginUser = true)
+        }
+    }
+
+    @Test
+    fun checkIsLoginUserIntent_Failure() {
+        val defaultState = UserDetailViewState.idle()
+        whenever(loginRepository.getLoginUser()).thenReturn(Single.error(expectedError))
+
+        viewModel.processIntents(Observable.just(UserDetailIntent.CheckIsLoginUserIntent(expectedUser.login)))
+
+        verify(loginRepository).getLoginUser()
         testObserver.assertValueAt(1) {
             it == defaultState.copy(isLoading = true)
         }

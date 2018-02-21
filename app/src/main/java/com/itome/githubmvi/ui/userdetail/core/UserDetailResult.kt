@@ -14,8 +14,14 @@ sealed class UserDetailResult : MviResult {
 
     sealed class FetchUserReposResult : UserDetailResult() {
         data class Success(val repos: List<Repository>) : FetchUserReposResult()
-        data class Feilure(val error: Throwable?) : FetchUserReposResult()
+        data class Failure(val error: Throwable?) : FetchUserReposResult()
         object InFlight : FetchUserReposResult()
+    }
+
+    sealed class CheckIsLoginUserResult: UserDetailResult() {
+        data class Success(val isLoginUser: Boolean) : CheckIsLoginUserResult()
+        data class Failure(val error: Throwable?) : CheckIsLoginUserResult()
+        object InFlight : CheckIsLoginUserResult()
     }
 
     sealed class CheckIsFollowedResult : UserDetailResult() {

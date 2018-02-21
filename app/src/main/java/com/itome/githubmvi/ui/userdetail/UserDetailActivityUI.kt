@@ -83,6 +83,7 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
             fab.imageResource = R.drawable.ic_follow
             fab.setOnClickListener { followClickPublisher.onNext(state.user?.login ?: "") }
         }
+        fab.setVisibility(!state.isLoginUser)
 
         state.repos?.let { repos ->
             reposAdapter.repos = repos

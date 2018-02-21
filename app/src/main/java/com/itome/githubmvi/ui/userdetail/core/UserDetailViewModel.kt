@@ -34,6 +34,7 @@ class UserDetailViewModel @Inject constructor(
         return when (intent) {
             is FetchUserIntent -> FetchUserAction(intent.userName)
             is FetchUserReposIntent -> FetchUserReposAction(intent.userName)
+            is CheckIsLoginUserIntent -> CheckIsLoginUserAction(intent.userName)
             is CheckIsFollowedIntent -> CheckIsFollowedAction(intent.userName)
             is FollowIntent -> FollowAction(intent.userName)
             is UnFollowIntent -> UnFollowAction(intent.userName)
@@ -63,9 +64,22 @@ class UserDetailViewModel @Inject constructor(
                                 error = null,
                                 isLoading = false
                         )
-                    is FetchUserReposResult.Feilure ->
+                    is FetchUserReposResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
                     FetchUserReposResult.InFlight ->
+                        previousState.copy(isLoading = true)
+                }
+
+                is CheckIsLoginUserResult -> when (result) {
+                    is CheckIsLoginUserResult.Success ->
+                        previousState.copy(
+                                isLoginUser = result.isLoginUser,
+                                error = null,
+                                isLoading = false
+                        )
+                    is CheckIsLoginUserResult.Failure ->
+                        previousState.copy(error = result.error, isLoading = false)
+                    CheckIsLoginUserResult.InFlight ->
                         previousState.copy(isLoading = true)
                 }
 
