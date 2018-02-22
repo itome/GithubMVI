@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import com.itome.githubmvi.BuildConfig
 import org.jetbrains.anko.frameLayout
 import org.jetbrains.anko.webView
 
@@ -42,7 +43,7 @@ class OAuth2Activity : AppCompatActivity() {
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             super.onPageStarted(view, url, favicon)
             url ?: return
-            if (url.startsWith("github-mvi://")) {
+            if (url.startsWith(BuildConfig.CALLBACK_SCHEME + "://" + BuildConfig.CALLBACK_HOST)) {
                 view?.stopLoading()
                 val code = Uri.parse(url).getQueryParameter("code")
                 val data = Intent().also { it.putExtra(CODE, code) }
