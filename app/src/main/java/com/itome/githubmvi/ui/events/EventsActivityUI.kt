@@ -36,6 +36,9 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
     private lateinit var endlessOnScrollListener: EndlessOnScrollListener
 
     fun applyState(state: EventsViewState) {
+        if (!state.isLoading && state.nextPage == 2) { // when first page loaded
+            endlessOnScrollListener.resetListener()
+        }
         eventsAdapter.events = state.events
         eventsAdapter.notifyDataSetChanged()
         swipeRefreshLayout.isRefreshing = state.isLoading
@@ -71,10 +74,7 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
             }
 
             swipeRefreshLayout = swipeRefreshLayout {
-                setOnRefreshListener {
-                    refreshPublisher.onNext(this)
-                    endlessOnScrollListener.resetListener()
-                }
+                setOnRefreshListener { refreshPublisher.onNext(this) }
                 recyclerView {
                     layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     adapter = eventsAdapter

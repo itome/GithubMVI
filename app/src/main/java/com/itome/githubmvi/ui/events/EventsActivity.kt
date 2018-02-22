@@ -44,6 +44,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         component.inject(this)
 
         ui.setContentView(this)
+        bind()
 
         disposable.add(ui.userImageClickPublisher.subscribe(this::showUserDetailActivity))
         disposable.add(ui.loginUserImageClickPublisher.subscribe(this::showUserDetailActivity))
@@ -54,7 +55,6 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
 
     override fun onStart() {
         super.onStart()
-        bind()
         fetchFirstPageIntentPublisher.onNext(FetchFirstPageIntent)
         fetchLoginUserIntentPublisher.onNext(FetchLoginUserIntent)
     }
