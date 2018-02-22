@@ -38,14 +38,15 @@ class RepositoryActivity : AppCompatActivity(), MviView<RepositoryIntent, Reposi
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui.setContentView(this)
-
         val component = DaggerRepositoryActivityComponent.builder()
                 .repositoryActivityModule(RepositoryActivityModule())
                 .apiModule(ApiModule())
                 .okHttpModule(OkHttpModule())
                 .build()
         component.inject(this)
+
+        ui.setContentView(this)
+        bindViewModel()
 
         setSupportActionBar(ui.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -59,7 +60,6 @@ class RepositoryActivity : AppCompatActivity(), MviView<RepositoryIntent, Reposi
 
     override fun onStart() {
         super.onStart()
-        bind()
         fetchRepositoryIntentPublisher.onNext(FetchRepositoryIntent(repositoryName))
         fetchReadmeIntentPublisher.onNext(FetchReadmeIntent(repositoryName))
         checkIsStarredIntentPublisher.onNext(CheckIsStarredIntent(repositoryName))
@@ -94,7 +94,7 @@ class RepositoryActivity : AppCompatActivity(), MviView<RepositoryIntent, Reposi
         }
     }
 
-    private fun bind() {
+    private fun bindViewModel() {
         disposable.add(viewModel.states().subscribe(this::render))
         viewModel.processIntents(intents())
     }

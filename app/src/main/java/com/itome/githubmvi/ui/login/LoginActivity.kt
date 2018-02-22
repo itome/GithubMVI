@@ -48,6 +48,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         component.inject(this)
 
         ui.setContentView(this)
+        bindViewModel()
 
         disposables.add(ui.oauthButtonClickPublisher.subscribe { showEventsActivity() })
     }
@@ -67,7 +68,6 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
     override fun onStart() {
         super.onStart()
-        bind()
         fetchLoginDataIntentPublisher.onNext(FetchLoginDataIntent)
     }
 
@@ -91,7 +91,7 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         ui.applyState(state)
     }
 
-    private fun bind() {
+    private fun bindViewModel() {
         disposables.add(viewModel.states().subscribe(this::render))
         viewModel.processIntents(intents())
     }

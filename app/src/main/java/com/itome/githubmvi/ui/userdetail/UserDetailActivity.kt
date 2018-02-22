@@ -41,14 +41,15 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui.setContentView(this)
-
         val component = DaggerUserDetailActivityComponent.builder()
                 .userDetailActivityModule(UserDetailActivityModule())
                 .apiModule(ApiModule())
                 .okHttpModule(OkHttpModule())
                 .build()
         component.inject(this)
+
+        ui.setContentView(this)
+        bindViewModel()
 
         setSupportActionBar(ui.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -63,7 +64,6 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
 
     override fun onStart() {
         super.onStart()
-        bind()
         fetchUserIntentPublisher.onNext(FetchUserIntent(userName))
         fetchUserReposIntentPublisher.onNext(FetchUserReposIntent(userName))
         checkIsFollowedIntentPublisher.onNext(CheckIsFollowedIntent(userName))
@@ -100,7 +100,7 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
         ui.applyState(state)
     }
 
-    private fun bind() {
+    private fun bindViewModel() {
         disposable.add(viewModel.states().subscribe(this::render))
         viewModel.processIntents(intents())
     }

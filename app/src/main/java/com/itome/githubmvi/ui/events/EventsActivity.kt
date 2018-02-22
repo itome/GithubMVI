@@ -36,7 +36,6 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         val component = DaggerEventsActivityComponent.builder()
                 .eventsActivityModule(EventsActivityModule())
                 .apiModule(ApiModule())
@@ -44,7 +43,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         component.inject(this)
 
         ui.setContentView(this)
-        bind()
+        bindViewModel()
 
         disposable.add(ui.userImageClickPublisher.subscribe(this::showUserDetailActivity))
         disposable.add(ui.loginUserImageClickPublisher.subscribe(this::showUserDetailActivity))
@@ -76,7 +75,7 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
         ui.applyState(state)
     }
 
-    private fun bind() {
+    private fun bindViewModel() {
         disposable.add(viewModel.states().subscribe(this::render))
         viewModel.processIntents(intents())
     }
