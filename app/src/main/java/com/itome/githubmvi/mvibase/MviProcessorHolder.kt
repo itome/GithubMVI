@@ -1,6 +1,5 @@
 package com.itome.githubmvi.mvibase
 
-import com.itome.githubmvi.extensions.ofType
 import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import kotlin.reflect.KClass
@@ -24,7 +23,7 @@ abstract class MviProcessorHolder<A : MviAction, R : MviResult> {
             actions.publish { shared ->
                 Observable.merge<R>(
                     processors.map { (processor, clazz) ->
-                        shared.ofType(clazz)
+                        shared.ofType(clazz.java)
                             .compose(processor as ObservableTransformer<in Any, out R>)
                     }
                 ).mergeWith(
