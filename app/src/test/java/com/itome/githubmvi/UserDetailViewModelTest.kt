@@ -6,7 +6,7 @@ import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.data.repository.UserRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.userdetail.core.UserDetailActionProcessorHolder
+import com.itome.githubmvi.ui.userdetail.core.UserDetailProcessorHolder
 import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewModel
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
@@ -45,7 +45,7 @@ class UserDetailViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = UserDetailViewModel(UserDetailActionProcessorHolder(loginRepository, userRepository, schedulerProvider))
+        viewModel = UserDetailViewModel(UserDetailProcessorHolder(loginRepository, userRepository, schedulerProvider))
 
         testObserver = viewModel.states().test()
     }

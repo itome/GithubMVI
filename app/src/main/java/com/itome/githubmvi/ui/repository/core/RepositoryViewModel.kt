@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class RepositoryViewModel @Inject constructor(
-        private val actionProcessorHolder: RepositoryActionProcessorHolder
+        private val actionProcessorHolder: RepositoryProcessorHolder
 ) : MviViewModel<RepositoryIntent, RepositoryViewState> {
 
     private val intentsSubject = PublishSubject.create<RepositoryIntent>()

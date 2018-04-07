@@ -4,7 +4,7 @@ import com.itome.githubmvi.data.model.User
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.login.core.LoginActionProcessorHolder
+import com.itome.githubmvi.ui.login.core.LoginProcessorHolder
 import com.itome.githubmvi.ui.login.core.LoginIntent
 import com.itome.githubmvi.ui.login.core.LoginViewModel
 import com.itome.githubmvi.ui.login.core.LoginViewState
@@ -38,7 +38,7 @@ class LoginViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = LoginViewModel(LoginActionProcessorHolder(loginRepository, schedulerProvider))
+        viewModel = LoginViewModel(LoginProcessorHolder(loginRepository, schedulerProvider))
 
         testObserver = viewModel.states().test()
     }

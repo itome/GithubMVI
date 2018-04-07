@@ -9,7 +9,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
-class UserDetailActionProcessorHolder @Inject constructor(
+class UserDetailProcessorHolder @Inject constructor(
         private val loginRepository: LoginRepository,
         private val repository: UserRepository,
         private val schedulerProvider: SchedulerProvider

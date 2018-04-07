@@ -8,7 +8,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
-class RepositoryActionProcessorHolder @Inject constructor(
+class RepositoryProcessorHolder @Inject constructor(
         private val repository: ReposRepository,
         private val schedulerProvider: SchedulerProvider
 ) {

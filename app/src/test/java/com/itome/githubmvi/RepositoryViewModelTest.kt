@@ -5,7 +5,7 @@ import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.repository.ReposRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.repository.core.RepositoryActionProcessorHolder
+import com.itome.githubmvi.ui.repository.core.RepositoryProcessorHolder
 import com.itome.githubmvi.ui.repository.core.RepositoryIntent
 import com.itome.githubmvi.ui.repository.core.RepositoryViewModel
 import com.itome.githubmvi.ui.repository.core.RepositoryViewState
@@ -42,7 +42,7 @@ class RepositoryViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = RepositoryViewModel(RepositoryActionProcessorHolder(reposRepository, schedulerProvider))
+        viewModel = RepositoryViewModel(RepositoryProcessorHolder(reposRepository, schedulerProvider))
 
         testObserver = viewModel.states().test()
     }

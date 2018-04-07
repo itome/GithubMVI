@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class UserDetailViewModel @Inject constructor(
-        private val actionProcessorHolder: UserDetailActionProcessorHolder
+        private val actionProcessorHolder: UserDetailProcessorHolder
 ) : MviViewModel<UserDetailIntent, UserDetailViewState> {
 
     private val intentsSubject: PublishSubject<UserDetailIntent> = PublishSubject.create()

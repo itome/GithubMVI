@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class EventsViewModel @Inject constructor(
-        private val actionProcessorHolder: EventsActionProcessorHolder
+        private val actionProcessorHolder: EventsProcessorHolder
 ) : MviViewModel<EventsIntent, EventsViewState> {
 
     private val intentsSubject: PublishSubject<EventsIntent> = PublishSubject.create()

@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-        private val actionProcessorHolder: LoginActionProcessorHolder
+        private val actionProcessorHolder: LoginProcessorHolder
 ) : MviViewModel<LoginIntent, LoginViewState> {
 
     private val intentsSubject: PublishSubject<LoginIntent> = PublishSubject.create()

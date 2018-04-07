@@ -6,7 +6,7 @@ import com.itome.githubmvi.data.repository.EventsRepository
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.events.core.EventsActionProcessorHolder
+import com.itome.githubmvi.ui.events.core.EventsProcessorHolder
 import com.itome.githubmvi.ui.events.core.EventsIntent
 import com.itome.githubmvi.ui.events.core.EventsViewModel
 import com.itome.githubmvi.ui.events.core.EventsViewState
@@ -44,7 +44,8 @@ class EventsViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = EventsViewModel(EventsActionProcessorHolder(
+        viewModel = EventsViewModel(
+            EventsProcessorHolder(
                 eventsRepository, loginRepository, schedulerProvider)
         )
 

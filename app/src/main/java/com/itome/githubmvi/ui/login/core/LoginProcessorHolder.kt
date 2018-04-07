@@ -11,7 +11,7 @@ import io.reactivex.Observable
 import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
-class LoginActionProcessorHolder @Inject constructor(
+class LoginProcessorHolder @Inject constructor(
         private val repository: LoginRepository,
         private val schedulerProvider: SchedulerProvider
 ) {
