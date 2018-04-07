@@ -6,8 +6,8 @@ import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.data.repository.UserRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.userdetail.core.UserDetailProcessorHolder
 import com.itome.githubmvi.ui.userdetail.core.UserDetailIntent
+import com.itome.githubmvi.ui.userdetail.core.UserDetailProcessorHolder
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewModel
 import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import com.nhaarman.mockito_kotlin.any
@@ -45,7 +45,13 @@ class UserDetailViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = UserDetailViewModel(UserDetailProcessorHolder(loginRepository, userRepository, schedulerProvider))
+        viewModel = UserDetailViewModel(
+            UserDetailProcessorHolder(
+                loginRepository,
+                userRepository,
+                schedulerProvider
+            )
+        )
 
         testObserver = viewModel.states().test()
     }
@@ -119,7 +125,13 @@ class UserDetailViewModelTest {
         val defaultState = UserDetailViewState.idle()
         whenever(loginRepository.getLoginUser()).thenReturn(Single.just(expectedUser))
 
-        viewModel.processIntents(Observable.just(UserDetailIntent.CheckIsLoginUserIntent(expectedUser.login)))
+        viewModel.processIntents(
+            Observable.just(
+                UserDetailIntent.CheckIsLoginUserIntent(
+                    expectedUser.login
+                )
+            )
+        )
 
         verify(loginRepository).getLoginUser()
         testObserver.assertValueAt(1) {
@@ -135,7 +147,13 @@ class UserDetailViewModelTest {
         val defaultState = UserDetailViewState.idle()
         whenever(loginRepository.getLoginUser()).thenReturn(Single.error(expectedError))
 
-        viewModel.processIntents(Observable.just(UserDetailIntent.CheckIsLoginUserIntent(expectedUser.login)))
+        viewModel.processIntents(
+            Observable.just(
+                UserDetailIntent.CheckIsLoginUserIntent(
+                    expectedUser.login
+                )
+            )
+        )
 
         verify(loginRepository).getLoginUser()
         testObserver.assertValueAt(1) {
@@ -188,8 +206,8 @@ class UserDetailViewModelTest {
         verify(userRepository).followUser(expectedUser.name)
         testObserver.assertValueAt(1) {
             it == defaultState.copy(
-                    isFollowed = true,
-                    user = defaultState.user?.plusFollowerCount()
+                isFollowed = true,
+                user = defaultState.user?.plusFollowerCount()
             )
         }
     }
@@ -217,8 +235,8 @@ class UserDetailViewModelTest {
         verify(userRepository).unFollowUser(expectedUser.name)
         testObserver.assertValueAt(1) {
             it == defaultState.copy(
-                    isFollowed = false,
-                    user = defaultState.user?.minusFollowerCount()
+                isFollowed = false,
+                user = defaultState.user?.minusFollowerCount()
             )
         }
     }

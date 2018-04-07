@@ -10,7 +10,7 @@ sealed class RepositoryIntent : MviIntent {
 
     data class CheckIsStarredIntent(val repoName: String) : RepositoryIntent()
 
-    data class StarIntent(val repoName: String): RepositoryIntent()
+    data class StarIntent(val repoName: String) : RepositoryIntent()
 
-    data class UnStarIntent(val repoName: String): RepositoryIntent()
+    data class UnStarIntent(val repoName: String) : RepositoryIntent()
 }

@@ -10,8 +10,15 @@ import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getContextDrawable
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 
 class UserReposAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -77,7 +84,13 @@ class UserReposAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             }
         }
-        return ViewHolder(itemView, nameTextView, starCountTextView, forkCountTextView, descriptionTextView)
+        return ViewHolder(
+            itemView,
+            nameTextView,
+            starCountTextView,
+            forkCountTextView,
+            descriptionTextView
+        )
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder?, position: Int) {
@@ -87,11 +100,11 @@ class UserReposAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class ViewHolder(
-            itemView: View,
-            private val nameTextView: TextView,
-            private val starCountTextView: TextView,
-            private val forkCountTextView: TextView,
-            private val descriptionTextView: TextView
+        itemView: View,
+        private val nameTextView: TextView,
+        private val starCountTextView: TextView,
+        private val forkCountTextView: TextView,
+        private val descriptionTextView: TextView
     ) : RecyclerView.ViewHolder(itemView) {
         var repository: Repository = Repository()
             set(value) {

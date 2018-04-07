@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class EventsViewModel @Inject constructor(
-        private val actionProcessorHolder: EventsProcessorHolder
+    private val actionProcessorHolder: EventsProcessorHolder
 ) : MviViewModel<EventsIntent, EventsViewState> {
 
     private val intentsSubject: PublishSubject<EventsIntent> = PublishSubject.create()
@@ -23,11 +23,11 @@ class EventsViewModel @Inject constructor(
 
     private fun compose(): Observable<EventsViewState> {
         return intentsSubject
-                .map(this::actionFromIntent)
-                .compose(actionProcessorHolder.actionProcessor)
-                .scan(EventsViewState.idle(), reducer)
-                .replay(1)
-                .autoConnect(0)
+            .map(this::actionFromIntent)
+            .compose(actionProcessorHolder.actionProcessor)
+            .scan(EventsViewState.idle(), reducer)
+            .replay(1)
+            .autoConnect(0)
     }
 
     private fun actionFromIntent(intent: EventsIntent): EventsAction {
@@ -44,10 +44,10 @@ class EventsViewModel @Inject constructor(
                 is FetchFirstPageResult -> when (result) {
                     is FetchFirstPageResult.Success ->
                         previousState.copy(
-                                events = result.events,
-                                error = null,
-                                isLoading = false,
-                                nextPage = 2
+                            events = result.events,
+                            error = null,
+                            isLoading = false,
+                            nextPage = 2
                         )
                     is FetchFirstPageResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -58,10 +58,10 @@ class EventsViewModel @Inject constructor(
                 is FetchEventsPageResult -> when (result) {
                     is FetchEventsPageResult.Success ->
                         previousState.copy(
-                                events = previousState.events + result.events,
-                                error = null,
-                                isLoading = false,
-                                nextPage = previousState.nextPage + 1
+                            events = previousState.events + result.events,
+                            error = null,
+                            isLoading = false,
+                            nextPage = previousState.nextPage + 1
                         )
                     is FetchEventsPageResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -73,9 +73,9 @@ class EventsViewModel @Inject constructor(
                 is FetchLoginUserResult -> when (result) {
                     is FetchLoginUserResult.Success ->
                         previousState.copy(
-                                loginUser = result.user,
-                                error = null,
-                                isLoading = false
+                            loginUser = result.user,
+                            error = null,
+                            isLoading = false
                         )
                     is FetchLoginUserResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)

@@ -28,13 +28,26 @@ import com.itome.githubmvi.ui.markdownView
 import com.itome.githubmvi.ui.repository.core.RepositoryViewState
 import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.glide.transformations.BlurTransformation
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.collapsingToolbarLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.dimen
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.support.v4.nestedScrollView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 
 class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
 
@@ -55,14 +68,14 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
 
     fun applyState(state: RepositoryViewState) {
         Glide.with(headerImageView)
-                .load(state.repository?.owner?.avatar_url)
-                .apply(RequestOptions().placeholder(R.color.black))
-                .apply(RequestOptions.bitmapTransform(BlurTransformation(100)))
-                .into(headerImageView)
+            .load(state.repository?.owner?.avatar_url)
+            .apply(RequestOptions().placeholder(R.color.black))
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(100)))
+            .into(headerImageView)
         Glide.with(userCircleImageView)
-                .load(state.repository?.owner?.avatar_url)
-                .apply(RequestOptions().placeholder(R.color.gray))
-                .into(userCircleImageView)
+            .load(state.repository?.owner?.avatar_url)
+            .apply(RequestOptions().placeholder(R.color.gray))
+            .into(userCircleImageView)
 
         watchCountTextView.text = state.repository?.subscribers_count?.toString()
         starCountTextView.text = state.repository?.stargazers_count?.toString()
@@ -71,11 +84,13 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
         descriptionTextView.text = state.repository?.description
 
         if (state.isStarred) {
-            fab.backgroundTintList = ColorStateList.valueOf(fab.context.getContextColor(R.color.red))
+            fab.backgroundTintList =
+                    ColorStateList.valueOf(fab.context.getContextColor(R.color.red))
             fab.imageResource = R.drawable.ic_star_filled_white
             fab.setOnClickListener { unStarClickPublisher.onNext(it) }
         } else {
-            fab.backgroundTintList = ColorStateList.valueOf(fab.context.getContextColor(R.color.green))
+            fab.backgroundTintList =
+                    ColorStateList.valueOf(fab.context.getContextColor(R.color.green))
             fab.imageResource = R.drawable.ic_star_outline_white
             fab.setOnClickListener { starClickPublisher.onNext(it) }
         }
@@ -99,9 +114,11 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
                     setExpandedTitleTextAppearance(R.style.SessionTitleExpanded)
 
                     frameLayout {
-                        layoutParams = CollapsingToolbarLayout.LayoutParams(matchParent, matchParent).apply {
-                            collapseMode = COLLAPSE_MODE_PARALLAX
-                        }
+                        layoutParams =
+                                CollapsingToolbarLayout.LayoutParams(matchParent, matchParent)
+                                    .apply {
+                                        collapseMode = COLLAPSE_MODE_PARALLAX
+                                    }
 
                         headerImageView = imageView {
                             scaleType = ImageView.ScaleType.CENTER_CROP
@@ -184,8 +201,8 @@ class RepositoryActivityUI : AnkoComponent<RepositoryActivity> {
                     toolbar = toolbar {
                         title = ""
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                dimen(context.getResourceId(R.attr.actionBarSize))
+                            matchParent,
+                            dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }

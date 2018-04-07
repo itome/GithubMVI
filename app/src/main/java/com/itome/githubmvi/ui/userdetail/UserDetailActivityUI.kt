@@ -21,17 +21,30 @@ import com.itome.githubmvi.R
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getResourceId
 import com.itome.githubmvi.extensions.setVisibility
-import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import com.itome.githubmvi.ui.circleImageView
+import com.itome.githubmvi.ui.userdetail.core.UserDetailViewState
 import io.reactivex.subjects.PublishSubject
 import jp.wasabeef.glide.transformations.BlurTransformation
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.collapsingToolbarLayout
 import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.design.floatingActionButton
 import org.jetbrains.anko.design.themedAppBarLayout
+import org.jetbrains.anko.dimen
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.imageResource
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
 import org.jetbrains.anko.recyclerview.v7.recyclerView
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 
 
 class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
@@ -57,14 +70,14 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
 
     fun applyState(state: UserDetailViewState) {
         Glide.with(headerImageView.context)
-                .load(state.user?.avatar_url)
-                .apply(RequestOptions().placeholder(R.color.black))
-                .apply(RequestOptions.bitmapTransform(BlurTransformation(100)))
-                .into(headerImageView)
+            .load(state.user?.avatar_url)
+            .apply(RequestOptions().placeholder(R.color.black))
+            .apply(RequestOptions.bitmapTransform(BlurTransformation(100)))
+            .into(headerImageView)
         Glide.with(userCircleImageView)
-                .load(state.user?.avatar_url)
-                .apply(RequestOptions().placeholder(R.color.gray))
-                .into(userCircleImageView)
+            .load(state.user?.avatar_url)
+            .apply(RequestOptions().placeholder(R.color.gray))
+            .into(userCircleImageView)
 
         loginNameTextView.text = state.user?.login
         fullNameTextView.text = state.user?.name
@@ -75,11 +88,13 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
         emailImageView.setVisibility(state.user?.email?.isNotEmpty() ?: false)
 
         if (state.isFollowed) {
-            fab.backgroundTintList = ColorStateList.valueOf(fab.context.getContextColor(R.color.red))
+            fab.backgroundTintList =
+                    ColorStateList.valueOf(fab.context.getContextColor(R.color.red))
             fab.imageResource = R.drawable.ic_unfollow
             fab.setOnClickListener { unFollowClickPublisher.onNext(state.user?.login ?: "") }
         } else {
-            fab.backgroundTintList = ColorStateList.valueOf(fab.context.getContextColor(R.color.green))
+            fab.backgroundTintList =
+                    ColorStateList.valueOf(fab.context.getContextColor(R.color.green))
             fab.imageResource = R.drawable.ic_follow
             fab.setOnClickListener { followClickPublisher.onNext(state.user?.login ?: "") }
         }
@@ -105,9 +120,11 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                     setExpandedTitleTextAppearance(R.style.SessionTitleExpanded)
 
                     frameLayout {
-                        layoutParams = CollapsingToolbarLayout.LayoutParams(matchParent, matchParent).apply {
-                            collapseMode = COLLAPSE_MODE_PARALLAX
-                        }
+                        layoutParams =
+                                CollapsingToolbarLayout.LayoutParams(matchParent, matchParent)
+                                    .apply {
+                                        collapseMode = COLLAPSE_MODE_PARALLAX
+                                    }
 
                         headerImageView = imageView {
                             scaleType = ImageView.ScaleType.CENTER_CROP
@@ -138,7 +155,8 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                                     textSize = 14F
                                     textColor = context.getContextColor(R.color.white)
                                 }.lparams(wrapContent, wrapContent)
-                                emailImageView = imageView(R.drawable.ic_email).lparams(dip(16), dip(16))
+                                emailImageView =
+                                        imageView(R.drawable.ic_email).lparams(dip(16), dip(16))
                                 emailTextView = textView {
                                     textSize = 14F
                                     textColor = context.getContextColor(R.color.white)
@@ -182,8 +200,8 @@ class UserDetailActivityUI : AnkoComponent<UserDetailActivity> {
                     toolbar = toolbar {
                         title = ""
                         layoutParams = CollapsingToolbarLayout.LayoutParams(
-                                matchParent,
-                                dimen(context.getResourceId(R.attr.actionBarSize))
+                            matchParent,
+                            dimen(context.getResourceId(R.attr.actionBarSize))
                         ).apply {
                             collapseMode = COLLAPSE_MODE_PIN
                         }

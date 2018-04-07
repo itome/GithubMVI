@@ -2,11 +2,11 @@ package com.itome.githubmvi.data.model
 
 data class Readme(
 
-        var type: String = "",
+    var type: String = "",
 
-        var encoding: String = "",
+    var encoding: String = "",
 
-        var name: String = "",
+    var name: String = "",
 
-        var content: String = ""
+    var content: String = ""
 )

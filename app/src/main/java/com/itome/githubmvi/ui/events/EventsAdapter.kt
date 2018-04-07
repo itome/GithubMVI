@@ -15,8 +15,16 @@ import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.getContextDrawable
 import com.itome.githubmvi.ui.circleImageView
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.*
 import org.jetbrains.anko.cardview.v7.cardView
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.imageView
+import org.jetbrains.anko.linearLayout
+import org.jetbrains.anko.margin
+import org.jetbrains.anko.matchParent
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -91,11 +99,11 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     inner class ViewHolder(
-            itemView: View,
-            private val avatarImageView: ImageView,
-            private val iconImageView: ImageView,
-            private val contentsTextView: TextView,
-            private val dateTextView: TextView
+        itemView: View,
+        private val avatarImageView: ImageView,
+        private val iconImageView: ImageView,
+        private val contentsTextView: TextView,
+        private val dateTextView: TextView
     ) : RecyclerView.ViewHolder(itemView) {
 
         var event = Event()
@@ -103,17 +111,18 @@ class EventsAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 field = value
 
                 Glide.with(itemView.context).load(event.actor?.avatar_url)
-                        .apply(RequestOptions().placeholder(R.color.gray))
-                        .into(avatarImageView)
+                    .apply(RequestOptions().placeholder(R.color.gray))
+                    .into(avatarImageView)
 
                 Glide.with(itemView.context)
-                        .load(event.getEventType().iconResId)
-                        .into(iconImageView)
+                    .load(event.getEventType().iconResId)
+                    .into(iconImageView)
 
-                contentsTextView.text = itemView.context.getString(R.string.event_content_text,
-                        event.actor!!.login,
-                        itemView.context.getString(event.getEventType().actionResId),
-                        event.repo!!.name
+                contentsTextView.text = itemView.context.getString(
+                    R.string.event_content_text,
+                    event.actor!!.login,
+                    itemView.context.getString(event.getEventType().actionResId),
+                    event.repo!!.name
                 )
 
                 dateTextView.text = formatDate(itemView.context, event.created_at)

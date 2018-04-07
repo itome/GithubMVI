@@ -10,12 +10,12 @@ import com.itome.githubmvi.di.module.ApiModule
 import com.itome.githubmvi.di.module.LoginActivityModule
 import com.itome.githubmvi.mvibase.MviView
 import com.itome.githubmvi.mvibase.MviViewModel
+import com.itome.githubmvi.ui.OAuth2Activity
 import com.itome.githubmvi.ui.events.EventsActivity
 import com.itome.githubmvi.ui.login.core.LoginIntent
 import com.itome.githubmvi.ui.login.core.LoginIntent.FetchAccessTokenIntent
 import com.itome.githubmvi.ui.login.core.LoginIntent.FetchLoginDataIntent
 import com.itome.githubmvi.ui.login.core.LoginViewState
-import com.itome.githubmvi.ui.OAuth2Activity
 import io.reactivex.Observable
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.subjects.PublishSubject
@@ -42,9 +42,9 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val component = DaggerLoginActivityComponent.builder()
-                .loginActivityModule(LoginActivityModule())
-                .apiModule(ApiModule())
-                .build()
+            .loginActivityModule(LoginActivityModule())
+            .apiModule(ApiModule())
+            .build()
         component.inject(this)
 
         ui.setContentView(this)
@@ -58,10 +58,11 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
         if (requestCode == REQUEST_OAUTH && resultCode == Activity.RESULT_OK) {
             val code = data?.getStringExtra(OAuth2Activity.CODE)!!
             fetchAccessTokenIntentPublisher.onNext(
-                    FetchAccessTokenIntent(
-                            BuildConfig.CLIENT_ID,
-                            BuildConfig.CLIENT_SECRET,
-                            code)
+                FetchAccessTokenIntent(
+                    BuildConfig.CLIENT_ID,
+                    BuildConfig.CLIENT_SECRET,
+                    code
+                )
             )
         }
     }
@@ -78,8 +79,8 @@ class LoginActivity : AppCompatActivity(), MviView<LoginIntent, LoginViewState> 
 
     override fun intents(): Observable<LoginIntent> {
         return Observable.merge(
-                fetchAccessTokenIntentPublisher,
-                fetchLoginDataIntentPublisher
+            fetchAccessTokenIntentPublisher,
+            fetchLoginDataIntentPublisher
         )
     }
 

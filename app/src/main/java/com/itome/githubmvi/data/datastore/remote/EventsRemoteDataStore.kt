@@ -6,9 +6,9 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class EventsRemoteDataStore @Inject constructor(
-        private val apiService: ApiService
+    private val apiService: ApiService
 ) {
     fun fetchEvents(
-            accessToken: String, userName: String, pageNum: Int
+        accessToken: String, userName: String, pageNum: Int
     ): Single<List<Event>> = apiService.getEvents("token " + accessToken, userName, pageNum)
 }

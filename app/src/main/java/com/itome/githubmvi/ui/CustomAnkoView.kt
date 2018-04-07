@@ -9,12 +9,12 @@ import org.jetbrains.anko.custom.ankoView
 
 inline fun ViewManager.circleImageView(theme: Int = 0) = circleImageView(theme) {}
 inline fun ViewManager.circleImageView(
-        theme: Int = 0,
-        init: CircleImageView.() -> Unit
+    theme: Int = 0,
+    init: CircleImageView.() -> Unit
 ): CircleImageView = ankoView({ CircleImageView(it) }, theme, init)
 
 inline fun ViewManager.markdownView(theme: Int = 0) = markdownView(theme) {}
 inline fun ViewManager.markdownView(
-        theme: Int = 0,
-        init: MarkdownView.() -> Unit
+    theme: Int = 0,
+    init: MarkdownView.() -> Unit
 ): MarkdownView = ankoView({ MarkdownView(it) }, theme, init)

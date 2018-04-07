@@ -14,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
-        private val actionProcessorHolder: LoginProcessorHolder
+    private val actionProcessorHolder: LoginProcessorHolder
 ) : MviViewModel<LoginIntent, LoginViewState> {
 
     private val intentsSubject: PublishSubject<LoginIntent> = PublishSubject.create()
@@ -28,20 +28,20 @@ class LoginViewModel @Inject constructor(
 
     private fun compose(): Observable<LoginViewState> {
         return intentsSubject
-                .compose(intentFilter)
-                .map(this::actionFromIntent)
-                .compose(actionProcessorHolder.actionProcessor)
-                .scan(LoginViewState.idle(), reducer)
-                .replay(1)
-                .autoConnect(0)
+            .compose(intentFilter)
+            .map(this::actionFromIntent)
+            .compose(actionProcessorHolder.actionProcessor)
+            .scan(LoginViewState.idle(), reducer)
+            .replay(1)
+            .autoConnect(0)
     }
 
     private val intentFilter: ObservableTransformer<LoginIntent, LoginIntent>
         get() = ObservableTransformer { intents ->
             intents.publish { shared ->
                 Observable.merge(
-                        shared.ofType(FetchAccessTokenIntent::class.java).take(1),
-                        shared.notOfType(FetchAccessTokenIntent::class.java)
+                    shared.ofType(FetchAccessTokenIntent::class.java).take(1),
+                    shared.notOfType(FetchAccessTokenIntent::class.java)
                 )
             }
         }
@@ -61,40 +61,41 @@ class LoginViewModel @Inject constructor(
                 is FetchAccessTokenResult -> when (result) {
                     is FetchAccessTokenResult.Success ->
                         previousState.copy(
-                                userName = result.userName,
-                                userImageUrl = result.userImageUrl,
-                                needsAccessToken = false,
-                                isLoading = false
+                            userName = result.userName,
+                            userImageUrl = result.userImageUrl,
+                            needsAccessToken = false,
+                            isLoading = false
                         )
                     is FetchAccessTokenResult.Failure ->
                         previousState.copy(
-                                error = result.error,
-                                needsAccessToken = true,
-                                isLoading = false
+                            error = result.error,
+                            needsAccessToken = true,
+                            isLoading = false
                         )
                     FetchAccessTokenResult.StartNextActivity ->
                         previousState.copy(
-                                needsAccessToken = false,
-                                startNextActivity = true,
-                                isLoading = false
+                            needsAccessToken = false,
+                            startNextActivity = true,
+                            isLoading = false
                         )
                     FetchAccessTokenResult.InFlight ->
                         previousState.copy(
-                                isLoading = true,
-                                needsAccessToken = false
+                            isLoading = true,
+                            needsAccessToken = false
                         )
                 }
 
                 is FetchLoginDataResult -> when (result) {
                     is FetchLoginDataResult.Success ->
                         previousState.copy(
-                                userName = result.userName,
-                                userImageUrl = result.userImageUrl,
-                                isLoading = false)
+                            userName = result.userName,
+                            userImageUrl = result.userImageUrl,
+                            isLoading = false
+                        )
                     is FetchLoginDataResult.Failure ->
                         previousState.copy(
-                                error = result.error,
-                                isLoading = false
+                            error = result.error,
+                            isLoading = false
                         )
                     FetchLoginDataResult.NeedsAccessToken ->
                         previousState.copy(needsAccessToken = true, isLoading = false)

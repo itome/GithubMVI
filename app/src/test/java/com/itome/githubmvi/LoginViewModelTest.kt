@@ -4,8 +4,8 @@ import com.itome.githubmvi.data.model.User
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.login.core.LoginProcessorHolder
 import com.itome.githubmvi.ui.login.core.LoginIntent
+import com.itome.githubmvi.ui.login.core.LoginProcessorHolder
 import com.itome.githubmvi.ui.login.core.LoginViewModel
 import com.itome.githubmvi.ui.login.core.LoginViewState
 import com.nhaarman.mockito_kotlin.any
@@ -50,11 +50,22 @@ class LoginViewModelTest {
         val clientSecret = "clientSecret"
         val code = "code"
 
-        whenever(loginRepository.fetchAccessToken(any(), any(), any())).thenReturn(Single.just("token"))
+        whenever(
+            loginRepository.fetchAccessToken(
+                any(),
+                any(),
+                any()
+            )
+        ).thenReturn(Single.just("token"))
         whenever(loginRepository.fetchLoginUser()).thenReturn(Single.just(expectedUser))
 
-        viewModel.processIntents(Observable.just(LoginIntent.FetchAccessTokenIntent(
-                clientId, clientSecret, code)))
+        viewModel.processIntents(
+            Observable.just(
+                LoginIntent.FetchAccessTokenIntent(
+                    clientId, clientSecret, code
+                )
+            )
+        )
 
         verify(loginRepository).fetchAccessToken(clientId, clientSecret, code)
         verify(loginRepository).fetchLoginUser()
@@ -63,8 +74,8 @@ class LoginViewModelTest {
         }
         testObserver.assertValueAt(2) {
             it == defaultState.copy(
-                    userName = expectedUser.name,
-                    userImageUrl = expectedUser.avatar_url
+                userName = expectedUser.name,
+                userImageUrl = expectedUser.avatar_url
             )
         }
     }
@@ -76,11 +87,20 @@ class LoginViewModelTest {
         val clientSecret = "clientSecret"
         val code = "code"
 
-        whenever(loginRepository.fetchAccessToken(any(), any(), any())).thenReturn(Single.error(expectedError))
+        whenever(loginRepository.fetchAccessToken(any(), any(), any())).thenReturn(
+            Single.error(
+                expectedError
+            )
+        )
         whenever(loginRepository.fetchLoginUser()).thenReturn(Single.just(expectedUser))
 
-        viewModel.processIntents(Observable.just(LoginIntent.FetchAccessTokenIntent(
-                clientId, clientSecret, code)))
+        viewModel.processIntents(
+            Observable.just(
+                LoginIntent.FetchAccessTokenIntent(
+                    clientId, clientSecret, code
+                )
+            )
+        )
 
         verify(loginRepository).fetchAccessToken(clientId, clientSecret, code)
         testObserver.assertValueAt(1) {
@@ -107,8 +127,8 @@ class LoginViewModelTest {
         }
         testObserver.assertValueAt(2) {
             it == defaultState.copy(
-                    userName = expectedUser.name,
-                    userImageUrl = expectedUser.avatar_url
+                userName = expectedUser.name,
+                userImageUrl = expectedUser.avatar_url
             )
         }
     }

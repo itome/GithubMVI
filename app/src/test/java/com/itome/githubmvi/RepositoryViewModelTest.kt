@@ -5,8 +5,8 @@ import com.itome.githubmvi.data.model.Repository
 import com.itome.githubmvi.data.repository.ReposRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.repository.core.RepositoryProcessorHolder
 import com.itome.githubmvi.ui.repository.core.RepositoryIntent
+import com.itome.githubmvi.ui.repository.core.RepositoryProcessorHolder
 import com.itome.githubmvi.ui.repository.core.RepositoryViewModel
 import com.itome.githubmvi.ui.repository.core.RepositoryViewState
 import com.nhaarman.mockito_kotlin.any
@@ -42,7 +42,8 @@ class RepositoryViewModelTest {
 
         schedulerProvider = ImmediateSchedulerProvider()
 
-        viewModel = RepositoryViewModel(RepositoryProcessorHolder(reposRepository, schedulerProvider))
+        viewModel =
+                RepositoryViewModel(RepositoryProcessorHolder(reposRepository, schedulerProvider))
 
         testObserver = viewModel.states().test()
     }
@@ -52,7 +53,13 @@ class RepositoryViewModelTest {
         val defaultState = RepositoryViewState.idle()
         whenever(reposRepository.getRepository(any())).thenReturn(Single.just(expectedRepository))
 
-        viewModel.processIntents(Observable.just(RepositoryIntent.FetchRepositoryIntent(expectedRepository.full_name)))
+        viewModel.processIntents(
+            Observable.just(
+                RepositoryIntent.FetchRepositoryIntent(
+                    expectedRepository.full_name
+                )
+            )
+        )
 
         verify(reposRepository).getRepository(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
@@ -68,7 +75,13 @@ class RepositoryViewModelTest {
         val defaultState = RepositoryViewState.idle()
         whenever(reposRepository.getRepository(any())).thenReturn(Single.error(expectedError))
 
-        viewModel.processIntents(Observable.just(RepositoryIntent.FetchRepositoryIntent(expectedRepository.full_name)))
+        viewModel.processIntents(
+            Observable.just(
+                RepositoryIntent.FetchRepositoryIntent(
+                    expectedRepository.full_name
+                )
+            )
+        )
 
         verify(reposRepository).getRepository(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
@@ -84,7 +97,13 @@ class RepositoryViewModelTest {
         val defaultState = RepositoryViewState.idle()
         whenever(reposRepository.getReadme(any())).thenReturn(Single.just(expectedReadme))
 
-        viewModel.processIntents(Observable.just(RepositoryIntent.FetchReadmeIntent(expectedRepository.full_name)))
+        viewModel.processIntents(
+            Observable.just(
+                RepositoryIntent.FetchReadmeIntent(
+                    expectedRepository.full_name
+                )
+            )
+        )
 
         verify(reposRepository).getReadme(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
@@ -100,7 +119,13 @@ class RepositoryViewModelTest {
         val defaultState = RepositoryViewState.idle()
         whenever(reposRepository.getReadme(any())).thenReturn(Single.error(expectedError))
 
-        viewModel.processIntents(Observable.just(RepositoryIntent.FetchReadmeIntent(expectedRepository.full_name)))
+        viewModel.processIntents(
+            Observable.just(
+                RepositoryIntent.FetchReadmeIntent(
+                    expectedRepository.full_name
+                )
+            )
+        )
 
         verify(reposRepository).getReadme(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
@@ -116,7 +141,13 @@ class RepositoryViewModelTest {
         val defaultState = RepositoryViewState.idle()
         whenever(reposRepository.checkIsStarred(any())).thenReturn(Single.just(isStarred))
 
-        viewModel.processIntents(Observable.just(RepositoryIntent.CheckIsStarredIntent(expectedRepository.full_name)))
+        viewModel.processIntents(
+            Observable.just(
+                RepositoryIntent.CheckIsStarredIntent(
+                    expectedRepository.full_name
+                )
+            )
+        )
 
         verify(reposRepository).checkIsStarred(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
@@ -132,7 +163,13 @@ class RepositoryViewModelTest {
         val defaultState = RepositoryViewState.idle()
         whenever(reposRepository.checkIsStarred(any())).thenReturn(Single.error(expectedError))
 
-        viewModel.processIntents(Observable.just(RepositoryIntent.CheckIsStarredIntent(expectedRepository.full_name)))
+        viewModel.processIntents(
+            Observable.just(
+                RepositoryIntent.CheckIsStarredIntent(
+                    expectedRepository.full_name
+                )
+            )
+        )
 
         verify(reposRepository).checkIsStarred(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
@@ -153,8 +190,8 @@ class RepositoryViewModelTest {
         verify(reposRepository).starRepository(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
             it == defaultState.copy(
-                    isStarred = true,
-                    repository = defaultState.repository?.plusStarCount()
+                isStarred = true,
+                repository = defaultState.repository?.plusStarCount()
             )
         }
     }
@@ -182,8 +219,8 @@ class RepositoryViewModelTest {
         verify(reposRepository).unStarRepository(expectedRepository.full_name)
         testObserver.assertValueAt(1) {
             it == defaultState.copy(
-                    isStarred = false,
-                    repository = defaultState.repository?.minusStarCount()
+                isStarred = false,
+                repository = defaultState.repository?.minusStarCount()
             )
         }
     }

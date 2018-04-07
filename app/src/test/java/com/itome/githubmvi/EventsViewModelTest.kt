@@ -6,8 +6,8 @@ import com.itome.githubmvi.data.repository.EventsRepository
 import com.itome.githubmvi.data.repository.LoginRepository
 import com.itome.githubmvi.scheduler.ImmediateSchedulerProvider
 import com.itome.githubmvi.scheduler.SchedulerProvider
-import com.itome.githubmvi.ui.events.core.EventsProcessorHolder
 import com.itome.githubmvi.ui.events.core.EventsIntent
+import com.itome.githubmvi.ui.events.core.EventsProcessorHolder
 import com.itome.githubmvi.ui.events.core.EventsViewModel
 import com.itome.githubmvi.ui.events.core.EventsViewState
 import com.nhaarman.mockito_kotlin.whenever
@@ -46,7 +46,8 @@ class EventsViewModelTest {
 
         viewModel = EventsViewModel(
             EventsProcessorHolder(
-                eventsRepository, loginRepository, schedulerProvider)
+                eventsRepository, loginRepository, schedulerProvider
+            )
         )
 
         testObserver = viewModel.states().test()

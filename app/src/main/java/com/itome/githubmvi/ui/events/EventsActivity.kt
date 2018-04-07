@@ -37,9 +37,9 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val component = DaggerEventsActivityComponent.builder()
-                .eventsActivityModule(EventsActivityModule())
-                .apiModule(ApiModule())
-                .build()
+            .eventsActivityModule(EventsActivityModule())
+            .apiModule(ApiModule())
+            .build()
         component.inject(this)
 
         ui.setContentView(this)
@@ -65,9 +65,9 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
 
     override fun intents(): Observable<EventsIntent> {
         return Observable.merge(
-                fetchFirstPageIntentPublisher,
-                fetchPageIntentPublisher,
-                fetchLoginUserIntentPublisher
+            fetchFirstPageIntentPublisher,
+            fetchPageIntentPublisher,
+            fetchLoginUserIntentPublisher
         )
     }
 
@@ -81,14 +81,18 @@ class EventsActivity : AppCompatActivity(), MviView<EventsIntent, EventsViewStat
     }
 
     private fun showUserDetailActivity(pair: Pair<String, View>) {
-        val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(this, pair.second, pair.second.transitionName)
+        val compat = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            this,
+            pair.second,
+            pair.second.transitionName
+        )
         val intent = intentFor<UserDetailActivity>(UserDetailActivity.USER_NAME to pair.first)
         startActivity(intent, compat.toBundle())
     }
 
     private fun showRepositoryActivity(fullName: String) {
         startActivity<RepositoryActivity>(
-                RepositoryActivity.REPOSITORY_NAME to fullName
+            RepositoryActivity.REPOSITORY_NAME to fullName
         )
     }
 

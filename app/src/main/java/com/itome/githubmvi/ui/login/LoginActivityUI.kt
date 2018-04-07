@@ -10,10 +10,19 @@ import com.bumptech.glide.request.RequestOptions
 import com.itome.githubmvi.R
 import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.extensions.setVisibility
-import com.itome.githubmvi.ui.login.core.LoginViewState
 import com.itome.githubmvi.ui.circleImageView
+import com.itome.githubmvi.ui.login.core.LoginViewState
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
+import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.button
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.frameLayout
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 
 class LoginActivityUI : AnkoComponent<LoginActivity> {
 
@@ -32,9 +41,9 @@ class LoginActivityUI : AnkoComponent<LoginActivity> {
         welcomeTextView.setVisibility(!state.needsAccessToken)
 
         Glide.with(userImageView.context)
-                .load(state.userImageUrl)
-                .apply(RequestOptions().placeholder(R.color.gray))
-                .into(userImageView)
+            .load(state.userImageUrl)
+            .apply(RequestOptions().placeholder(R.color.gray))
+            .into(userImageView)
         welcomeTextView.text = if (state.isLoading) {
             welcomeTextView.context.getString(R.string.fetching_user_data)
         } else {

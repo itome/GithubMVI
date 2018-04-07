@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class UserDetailViewModel @Inject constructor(
-        private val actionProcessorHolder: UserDetailProcessorHolder
+    private val actionProcessorHolder: UserDetailProcessorHolder
 ) : MviViewModel<UserDetailIntent, UserDetailViewState> {
 
     private val intentsSubject: PublishSubject<UserDetailIntent> = PublishSubject.create()
@@ -23,11 +23,11 @@ class UserDetailViewModel @Inject constructor(
 
     private fun compose(): Observable<UserDetailViewState> {
         return intentsSubject
-                .map(this::actionFromIntent)
-                .compose(actionProcessorHolder.actionProcessor)
-                .scan(UserDetailViewState.idle(), reducer)
-                .replay(1)
-                .autoConnect(0)
+            .map(this::actionFromIntent)
+            .compose(actionProcessorHolder.actionProcessor)
+            .scan(UserDetailViewState.idle(), reducer)
+            .replay(1)
+            .autoConnect(0)
     }
 
     private fun actionFromIntent(intent: UserDetailIntent): UserDetailAction {
@@ -47,9 +47,9 @@ class UserDetailViewModel @Inject constructor(
                 is FetchUserResult -> when (result) {
                     is FetchUserResult.Success ->
                         previousState.copy(
-                                user = result.user,
-                                error = null,
-                                isLoading = false
+                            user = result.user,
+                            error = null,
+                            isLoading = false
                         )
                     is FetchUserResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -60,9 +60,9 @@ class UserDetailViewModel @Inject constructor(
                 is FetchUserReposResult -> when (result) {
                     is FetchUserReposResult.Success ->
                         previousState.copy(
-                                repos = result.repos,
-                                error = null,
-                                isLoading = false
+                            repos = result.repos,
+                            error = null,
+                            isLoading = false
                         )
                     is FetchUserReposResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -73,9 +73,9 @@ class UserDetailViewModel @Inject constructor(
                 is CheckIsLoginUserResult -> when (result) {
                     is CheckIsLoginUserResult.Success ->
                         previousState.copy(
-                                isLoginUser = result.isLoginUser,
-                                error = null,
-                                isLoading = false
+                            isLoginUser = result.isLoginUser,
+                            error = null,
+                            isLoading = false
                         )
                     is CheckIsLoginUserResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -86,9 +86,9 @@ class UserDetailViewModel @Inject constructor(
                 is CheckIsFollowedResult -> when (result) {
                     is CheckIsFollowedResult.Success ->
                         previousState.copy(
-                                isFollowed = result.isFollowed,
-                                error = null,
-                                isLoading = false
+                            isFollowed = result.isFollowed,
+                            error = null,
+                            isLoading = false
                         )
                     is CheckIsFollowedResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -98,16 +98,16 @@ class UserDetailViewModel @Inject constructor(
 
                 is FollowResult -> when (result) {
                     FollowResult.Success -> previousState.copy(
-                            isFollowed = true,
-                            user = previousState.user?.plusFollowerCount()
+                        isFollowed = true,
+                        user = previousState.user?.plusFollowerCount()
                     )
                     is FollowResult.Failure -> previousState.copy(error = result.error)
                 }
 
                 is UnFollowResult -> when (result) {
                     UnFollowResult.Success -> previousState.copy(
-                            isFollowed = false,
-                            user = previousState.user?.minusFollowerCount()
+                        isFollowed = false,
+                        user = previousState.user?.minusFollowerCount()
                     )
                     is UnFollowResult.Failure -> previousState.copy(error = result.error)
                 }

@@ -42,10 +42,10 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val component = DaggerUserDetailActivityComponent.builder()
-                .userDetailActivityModule(UserDetailActivityModule())
-                .apiModule(ApiModule())
-                .okHttpModule(OkHttpModule())
-                .build()
+            .userDetailActivityModule(UserDetailActivityModule())
+            .apiModule(ApiModule())
+            .okHttpModule(OkHttpModule())
+            .build()
         component.inject(this)
 
         ui.setContentView(this)
@@ -86,14 +86,16 @@ class UserDetailActivity : AppCompatActivity(), MviView<UserDetailIntent, UserDe
     }
 
     override fun intents(): Observable<UserDetailIntent> {
-        return Observable.merge(listOf(
+        return Observable.merge(
+            listOf(
                 fetchUserIntentPublisher,
                 fetchUserReposIntentPublisher,
                 checkIsLoginUserIntentPublisher,
                 checkIsFollowedIntentPublisher,
                 unFollowIntentPublisher,
                 followIntentPublisher
-        ))
+            )
+        )
     }
 
     override fun render(state: UserDetailViewState) {

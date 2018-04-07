@@ -9,7 +9,7 @@ import io.reactivex.subjects.PublishSubject
 import javax.inject.Inject
 
 class RepositoryViewModel @Inject constructor(
-        private val actionProcessorHolder: RepositoryProcessorHolder
+    private val actionProcessorHolder: RepositoryProcessorHolder
 ) : MviViewModel<RepositoryIntent, RepositoryViewState> {
 
     private val intentsSubject = PublishSubject.create<RepositoryIntent>()
@@ -23,11 +23,11 @@ class RepositoryViewModel @Inject constructor(
 
     private fun compose(): Observable<RepositoryViewState> {
         return intentsSubject
-                .map(this::actionFromIntent)
-                .compose(actionProcessorHolder.actionProcessor)
-                .scan(RepositoryViewState.idle(), reducer)
-                .replay(1)
-                .autoConnect(0)
+            .map(this::actionFromIntent)
+            .compose(actionProcessorHolder.actionProcessor)
+            .scan(RepositoryViewState.idle(), reducer)
+            .replay(1)
+            .autoConnect(0)
     }
 
     private fun actionFromIntent(intent: RepositoryIntent): RepositoryAction {
@@ -46,9 +46,9 @@ class RepositoryViewModel @Inject constructor(
                 is FetchRepositoryResult -> when (result) {
                     is FetchRepositoryResult.Success ->
                         previousState.copy(
-                                repository = result.repository,
-                                error = null,
-                                isLoading = false
+                            repository = result.repository,
+                            error = null,
+                            isLoading = false
                         )
                     is FetchRepositoryResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -58,9 +58,9 @@ class RepositoryViewModel @Inject constructor(
                 is FetchReadmeResult -> when (result) {
                     is FetchReadmeResult.Success ->
                         previousState.copy(
-                                readme = result.readme,
-                                error = null,
-                                isLoading = false
+                            readme = result.readme,
+                            error = null,
+                            isLoading = false
                         )
                     is FetchReadmeResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -70,9 +70,9 @@ class RepositoryViewModel @Inject constructor(
                 is CheckIsStarredResult -> when (result) {
                     is CheckIsStarredResult.Success ->
                         previousState.copy(
-                                isStarred = result.isStarred,
-                                error = null,
-                                isLoading = false
+                            isStarred = result.isStarred,
+                            error = null,
+                            isLoading = false
                         )
                     is CheckIsStarredResult.Failure ->
                         previousState.copy(error = result.error, isLoading = false)
@@ -82,16 +82,16 @@ class RepositoryViewModel @Inject constructor(
                 is StarResult -> when (result) {
                     StarResult.Success ->
                         previousState.copy(
-                                isStarred = true,
-                                repository = previousState.repository?.plusStarCount()
+                            isStarred = true,
+                            repository = previousState.repository?.plusStarCount()
                         )
                     is StarResult.Failure -> previousState.copy(error = result.error)
                 }
                 is UnStarResult -> when (result) {
                     UnStarResult.Success ->
                         previousState.copy(
-                                isStarred = false,
-                                repository = previousState.repository?.minusStarCount()
+                            isStarred = false,
+                            repository = previousState.repository?.minusStarCount()
                         )
                     is UnStarResult.Failure -> previousState.copy(error = result.error)
                 }

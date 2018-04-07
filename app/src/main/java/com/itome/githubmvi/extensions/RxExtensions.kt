@@ -23,6 +23,6 @@ fun <T : Any, U : Any> Observable<T>.notOfType(clazz: Class<U>): Observable<T> {
 
 fun <T> pairWithDelay(delaySec: Long, immediate: T, delayed: T): Observable<T> {
     return Observable.timer(delaySec, TimeUnit.SECONDS)
-            .map { delayed }
-            .startWith(immediate)
+        .map { delayed }
+        .startWith(immediate)
 }

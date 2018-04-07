@@ -9,42 +9,42 @@ import io.reactivex.Single
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
-        private val loginLocalDataStore: LoginLocalDataStore,
-        private val remoteDataStore: UserRemoteDateStore
+    private val loginLocalDataStore: LoginLocalDataStore,
+    private val remoteDataStore: UserRemoteDateStore
 ) {
 
     fun getUser(userName: String): Single<User> {
         return loginLocalDataStore.readAccessToken()
-                .flatMap { accessToken ->
-                    remoteDataStore.fetchUser(accessToken, userName)
-                }
+            .flatMap { accessToken ->
+                remoteDataStore.fetchUser(accessToken, userName)
+            }
     }
 
     fun getUserRepos(userName: String): Single<List<Repository>> {
         return loginLocalDataStore.readAccessToken()
-                .flatMap { accessToken ->
-                    remoteDataStore.fetchUserRepos(accessToken, userName)
-                }
+            .flatMap { accessToken ->
+                remoteDataStore.fetchUserRepos(accessToken, userName)
+            }
     }
 
     fun checkIsFollowed(userName: String): Single<Boolean> {
         return loginLocalDataStore.readAccessToken()
-                .flatMap { accessToken ->
-                    remoteDataStore.checkIsFollowed(accessToken, userName)
-                }
+            .flatMap { accessToken ->
+                remoteDataStore.checkIsFollowed(accessToken, userName)
+            }
     }
 
     fun followUser(userName: String): Completable {
         return loginLocalDataStore.readAccessToken()
-                .flatMapCompletable { accessToken ->
-                    remoteDataStore.followUser(accessToken, userName)
-                }
+            .flatMapCompletable { accessToken ->
+                remoteDataStore.followUser(accessToken, userName)
+            }
     }
 
     fun unFollowUser(userName: String): Completable {
         return loginLocalDataStore.readAccessToken()
-                .flatMapCompletable { accessToken ->
-                    remoteDataStore.unFollowUser(accessToken, userName)
-                }
+            .flatMapCompletable { accessToken ->
+                remoteDataStore.unFollowUser(accessToken, userName)
+            }
     }
 }

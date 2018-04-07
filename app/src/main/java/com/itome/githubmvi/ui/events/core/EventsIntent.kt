@@ -8,5 +8,5 @@ sealed class EventsIntent : MviIntent {
 
     data class FetchPageIntent(val pageNum: Int) : EventsIntent()
 
-    object FetchLoginUserIntent: EventsIntent()
+    object FetchLoginUserIntent : EventsIntent()
 }

@@ -9,12 +9,14 @@ import dagger.Component
 import javax.inject.Singleton
 
 @Singleton
-@Component(modules = [
-    (UserDetailActivityModule::class),
-    (ApiModule::class),
-    (OkHttpModule::class),
-    (SchedulerModule::class)
-])
+@Component(
+    modules = [
+        (UserDetailActivityModule::class),
+        (ApiModule::class),
+        (OkHttpModule::class),
+        (SchedulerModule::class)
+    ]
+)
 interface UserDetailActivityComponent {
     fun inject(activity: UserDetailActivity)
 }

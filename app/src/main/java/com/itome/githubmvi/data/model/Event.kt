@@ -4,15 +4,15 @@ import com.itome.githubmvi.R
 
 open class Event(
 
-        var id: String = "",
+    var id: String = "",
 
-        var type: String = "",
+    var type: String = "",
 
-        var repo: EventRepo? = null,
+    var repo: EventRepo? = null,
 
-        var actor: EventActor? = null,
+    var actor: EventActor? = null,
 
-        var created_at: String = ""
+    var created_at: String = ""
 
 ) {
 
@@ -48,29 +48,29 @@ open class Event(
 
     data class EventActor(
 
-            var id: Int = 0,
+        var id: Int = 0,
 
-            var login: String = "",
+        var login: String = "",
 
-            var avatar_url: String = "",
+        var avatar_url: String = "",
 
-            var url: String = ""
+        var url: String = ""
 
     )
 
     data class EventRepo(
 
-            var id: Int = 0,
+        var id: Int = 0,
 
-            var name: String = "",
+        var name: String = "",
 
-            var url: String = ""
+        var url: String = ""
 
     )
 
     enum class EventType(
-            val actionResId: Int,
-            val iconResId: Int
+        val actionResId: Int,
+        val iconResId: Int
     ) {
         NotFoundEvent(R.string.did_something, R.drawable.ic_info_outline),
         WatchEvent(R.string.starred, R.drawable.ic_star_filled),

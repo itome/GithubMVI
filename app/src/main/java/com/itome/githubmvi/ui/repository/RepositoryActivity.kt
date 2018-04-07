@@ -39,10 +39,10 @@ class RepositoryActivity : AppCompatActivity(), MviView<RepositoryIntent, Reposi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val component = DaggerRepositoryActivityComponent.builder()
-                .repositoryActivityModule(RepositoryActivityModule())
-                .apiModule(ApiModule())
-                .okHttpModule(OkHttpModule())
-                .build()
+            .repositoryActivityModule(RepositoryActivityModule())
+            .apiModule(ApiModule())
+            .okHttpModule(OkHttpModule())
+            .build()
         component.inject(this)
 
         ui.setContentView(this)
@@ -71,13 +71,15 @@ class RepositoryActivity : AppCompatActivity(), MviView<RepositoryIntent, Reposi
     }
 
     override fun intents(): Observable<RepositoryIntent> {
-        return Observable.merge(listOf(
+        return Observable.merge(
+            listOf(
                 fetchRepositoryIntentPublisher,
                 fetchReadmeIntentPublisher,
                 checkIsStarredIntentPublisher,
                 starRepositoryIntentPublisher,
                 unStarRepositoryIntent
-        ))
+            )
+        )
     }
 
     override fun render(state: RepositoryViewState) {

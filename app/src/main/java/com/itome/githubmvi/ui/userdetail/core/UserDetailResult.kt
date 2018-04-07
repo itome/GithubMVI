@@ -18,7 +18,7 @@ sealed class UserDetailResult : MviResult {
         object InFlight : FetchUserReposResult()
     }
 
-    sealed class CheckIsLoginUserResult: UserDetailResult() {
+    sealed class CheckIsLoginUserResult : UserDetailResult() {
         data class Success(val isLoginUser: Boolean) : CheckIsLoginUserResult()
         data class Failure(val error: Throwable?) : CheckIsLoginUserResult()
         object InFlight : CheckIsLoginUserResult()

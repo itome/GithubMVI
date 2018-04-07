@@ -10,25 +10,25 @@ import okhttp3.Request
 import javax.inject.Inject
 
 class UserRemoteDateStore @Inject constructor(
-        private val apiService: ApiService,
-        private val okHttpClient: OkHttpClient
+    private val apiService: ApiService,
+    private val okHttpClient: OkHttpClient
 ) {
 
     fun fetchUser(
-            accessToken: String, userName: String
+        accessToken: String, userName: String
     ): Single<User> = apiService.getUser("token " + accessToken, userName)
 
     fun fetchUserRepos(
-            accessToken: String, userName: String
+        accessToken: String, userName: String
     ): Single<List<Repository>> = apiService.getUserRepos("token " + accessToken, userName)
 
     fun checkIsFollowed(
-            accessToken: String, userName: String
+        accessToken: String, userName: String
     ): Single<Boolean> {
         val request = Request.Builder()
-                .url("https://api.github.com/user/following/$userName")
-                .header("Authorization", "token " + accessToken)
-                .build()
+            .url("https://api.github.com/user/following/$userName")
+            .header("Authorization", "token " + accessToken)
+            .build()
         return Single.create<Boolean> {
             try {
                 val response = okHttpClient.newCall(request).execute()
@@ -40,11 +40,11 @@ class UserRemoteDateStore @Inject constructor(
     }
 
     fun followUser(
-            accessToken: String, userName: String
+        accessToken: String, userName: String
     ): Completable = apiService.followUser("token " + accessToken, userName)
 
     fun unFollowUser(
-            accessToken: String, userName: String
+        accessToken: String, userName: String
     ): Completable = apiService.unFollowUser("token " + accessToken, userName)
 
 }

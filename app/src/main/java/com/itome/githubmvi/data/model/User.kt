@@ -7,48 +7,48 @@ import io.realm.annotations.RealmClass
 @RealmClass
 open class User(
 
-        @PrimaryKey
-        var id: Int? = 0,
+    @PrimaryKey
+    var id: Int? = 0,
 
-        var login: String = "",
+    var login: String = "",
 
-        var name: String = "",
+    var name: String = "",
 
-        var avatar_url: String = "",
+    var avatar_url: String = "",
 
-        var bio: String? = "",
+    var bio: String? = "",
 
-        var email: String? = "",
+    var email: String? = "",
 
-        var followers: Int = 0,
+    var followers: Int = 0,
 
-        var following: Int = 0
+    var following: Int = 0
 
 ) : RealmObject() {
 
     fun plusFollowerCount(): User {
         return User(
-                id = this.id,
-                login = this.login,
-                name = this.name,
-                avatar_url = this.avatar_url,
-                bio = this.bio,
-                email = this.email,
-                followers = this.followers + 1,
-                following = this.following
+            id = this.id,
+            login = this.login,
+            name = this.name,
+            avatar_url = this.avatar_url,
+            bio = this.bio,
+            email = this.email,
+            followers = this.followers + 1,
+            following = this.following
         )
     }
 
     fun minusFollowerCount(): User {
         return User(
-                id = this.id,
-                login = this.login,
-                name = this.name,
-                avatar_url = this.avatar_url,
-                bio = this.bio,
-                email = this.email,
-                followers = this.followers - 1,
-                following = this.following
+            id = this.id,
+            login = this.login,
+            name = this.name,
+            avatar_url = this.avatar_url,
+            bio = this.bio,
+            email = this.email,
+            followers = this.followers - 1,
+            following = this.following
         )
     }
 }

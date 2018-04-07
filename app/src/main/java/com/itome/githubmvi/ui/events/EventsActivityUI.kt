@@ -13,11 +13,18 @@ import com.itome.githubmvi.extensions.getContextColor
 import com.itome.githubmvi.ui.circleImageView
 import com.itome.githubmvi.ui.events.core.EventsViewState
 import io.reactivex.subjects.PublishSubject
-import org.jetbrains.anko.*
+import org.jetbrains.anko.AnkoComponent
+import org.jetbrains.anko.AnkoContext
 import org.jetbrains.anko.appcompat.v7.toolbar
 import org.jetbrains.anko.design.appBarLayout
+import org.jetbrains.anko.dip
+import org.jetbrains.anko.linearLayout
 import org.jetbrains.anko.recyclerview.v7.recyclerView
 import org.jetbrains.anko.support.v4.swipeRefreshLayout
+import org.jetbrains.anko.textColor
+import org.jetbrains.anko.textView
+import org.jetbrains.anko.verticalLayout
+import org.jetbrains.anko.wrapContent
 
 
 class EventsActivityUI : AnkoComponent<EventsActivity> {
@@ -44,9 +51,9 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
         swipeRefreshLayout.isRefreshing = state.isLoading
 
         Glide.with(userCircleImageView)
-                .load(state.loginUser?.avatar_url)
-                .apply(RequestOptions().placeholder(R.color.gray))
-                .into(userCircleImageView)
+            .load(state.loginUser?.avatar_url)
+            .apply(RequestOptions().placeholder(R.color.gray))
+            .into(userCircleImageView)
         userNameTextView.text = state.loginUser?.login
         userCircleImageView.setOnClickListener {
             state.loginUser?.let {
@@ -76,10 +83,11 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
             swipeRefreshLayout = swipeRefreshLayout {
                 setOnRefreshListener { refreshPublisher.onNext(this) }
                 recyclerView {
-                    layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+                    layoutManager =
+                            LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
                     adapter = eventsAdapter
                     endlessOnScrollListener = object : EndlessOnScrollListener(
-                            layoutManager as LinearLayoutManager
+                        layoutManager as LinearLayoutManager
                     ) {
                         override fun onLoadMore(page: Int) {
                             loadMorePublisher.onNext(page)
@@ -93,7 +101,7 @@ class EventsActivityUI : AnkoComponent<EventsActivity> {
     }
 
     abstract inner class EndlessOnScrollListener(
-            private val linearLayoutManager: LinearLayoutManager
+        private val linearLayoutManager: LinearLayoutManager
     ) : RecyclerView.OnScrollListener() {
 
         private val visibleThreshold = 5
