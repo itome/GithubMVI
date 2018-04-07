@@ -6,8 +6,6 @@ import com.itome.githubmvi.mvibase.MviProcessorHolder
 import com.itome.githubmvi.scheduler.SchedulerProvider
 import com.itome.githubmvi.ui.events.core.EventsAction.*
 import com.itome.githubmvi.ui.events.core.EventsResult.*
-import io.reactivex.Observable
-import io.reactivex.ObservableTransformer
 import javax.inject.Inject
 
 class EventsProcessorHolder @Inject constructor(
@@ -52,26 +50,9 @@ class EventsProcessorHolder @Inject constructor(
                 .startWith(FetchLoginUserResult.InFlight)
         }
 
-    override val actionProcessor =
-        ObservableTransformer<EventsAction, EventsResult> { actions ->
-            actions.publish { shared ->
-                Observable.merge(
-                    shared.ofType(FetchFirstPageAction::class.java).compose(fetchFirstPageProcessor),
-                    shared.ofType(FetchEventsPageAction::class.java).compose(
-                        fetchEventsPageProcessor
-                    ),
-                    shared.ofType(FetchLoginUserAction::class.java).compose(fetchLoginUserProcessor)
-                ).mergeWith(
-                    shared.filter({ v ->
-                        v != FetchFirstPageAction &&
-                                v !is FetchEventsPageAction &&
-                                v != FetchLoginUserAction
-                    }).flatMap({ w ->
-                        Observable.error<EventsResult>(
-                            IllegalArgumentException("Unknown Action type: $w")
-                        )
-                    })
-                )
-            }
-        }
+    override val actionProcessor = mergeProcessor(
+        fetchFirstPageProcessor to FetchFirstPageAction::class,
+        fetchEventsPageProcessor to FetchEventsPageAction::class,
+        fetchLoginUserProcessor to FetchLoginUserAction::class
+    )
 }
