@@ -1,8 +1,8 @@
 package com.itome.githubmvi.ui.repository.core
 
-import com.itome.githubmvi.mvibase.MviIntent
+import com.itome.githubmvi.mvibase.MviAction
 
-sealed class RepositoryAction : MviIntent {
+sealed class RepositoryAction : MviAction {
 
     data class FetchRepositoryAction(val repoName: String) : RepositoryAction()
 
